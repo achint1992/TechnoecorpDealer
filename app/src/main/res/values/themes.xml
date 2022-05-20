@@ -31,9 +31,6 @@
         <item name="android:textSize">@dimen/_16ssp</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.TechnoecorpDealer">
-        <item name="android:windowFullscreen">true</item>
-    </style>
 
     <style name="MyCustomEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/secondaryColor</item>

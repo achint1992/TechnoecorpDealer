@@ -20,7 +20,14 @@ class PhotoPdfAdapter(private var context: Context) :
     inner class PhotoViewHolder(private var binding: PhotoPdfGalleryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(gallery: Gallery) {
-            Glide.with(context).load(gallery.url).into(binding.iconImage)
+            when (gallery.type) {
+                "photo" -> {
+                    Glide.with(context).load(gallery.url).into(binding.iconImage)
+                }
+                "pdf" -> {
+                    binding.iconImage.setImageResource(R.drawable.pdf_icon)
+                }
+            }
             binding.fileTitle.text = gallery.title
             binding.iconImage.setOnClickListener {
                 when (gallery.type) {

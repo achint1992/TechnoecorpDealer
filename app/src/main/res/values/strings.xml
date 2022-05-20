@@ -14,6 +14,14 @@
     <string name="email">Email Address</string>
     <string name="username">User Name</string>
     <!--Register End-->
+    <!--Register-->
+    <string name="mobile_verification">Mobile Verification</string>
+    <string name="otp_hint">Enter OTP</string>
+    <string name="verify">Verify</string>
+    <string name="resend_otp">Resent OTP</string>
+    <string name="resend_timer_text">Please Wait 30 Seconds</string>
+
+    <!--Register End-->
 
 
     <!--Common-->
@@ -27,7 +35,6 @@
     <string name="selected">Selected</string>
     <string name="require_internet">Require Internet Connection</string>
     <string name="forget_password">Forget Password ?</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="withdrawal_request_success">Withdrawal Request Created Successfully..</string>
     <!--Common End-->
 
@@ -35,22 +42,17 @@
 
     <string name="home">Home</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="how_activate">How to Activate?</string>
     <string name="leads">Dealer Certificate</string>
     <string name="idCard">Id Card</string>
     <string name="kycDetails">KYC Details</string>
     <string name="payment">Purchase Product</string>
-    <string name="testimonials">Testimonials</string>
     <string name="photo_downloads">Photo Downloads</string>
     <string name="video_downloads">Video Downloads</string>
     <string name="pdf_downloads">PDF Downloads</string>
     <string name="policies">Policies</string>
     <string name="terms">Terms of Use</string>
-    <string name="support">Support</string>
     <string name="dealer">Dealer</string>
     <string name="logout">Logout</string>
-    <string name="dashboard">Dashboard</string>
-    <string name="panel">Business</string>
     <string name="withdrawal_request">Withdrawal</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -88,4 +90,6 @@
     <string name="confirm_account_number">Confirm Account Number</string>
 
     <string name="buy_at">Buy At %1$s</string>
+    <string name="city_state">%1$s, %2$s</string>
+
 </resources>

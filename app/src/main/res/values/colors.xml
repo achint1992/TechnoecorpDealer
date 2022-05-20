@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="primaryColor">#95424e</color>
@@ -17,10 +11,8 @@
     <color name="light_grey">#f9f9f9</color>
 
     <!--color option for listing-->
-    <item name="blue" type="color">#FF33B5E5</item>
     <item name="purple" type="color">#FFAA66CC</item>
     <item name="green" type="color">#FF99CC00</item>
-    <item name="orange" type="color">#FFFFBB33</item>
     <item name="red" type="color">#FFFF4444</item>
     <item name="darkblue" type="color">#FF0099CC</item>
     <item name="darkpurple" type="color">#FF9933CC</item>
@@ -28,8 +20,6 @@
     <item name="darkorange" type="color">#FFFF8800</item>
     <item name="darkred" type="color">#FFCC0000</item>
     <color name="bright_pink">#FF007F</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="cyan">#00FFFF</color>
     <color name="azure">#007FFF</color>
     <color name="violet">#7F00FF</color>
     <color name="magenta">#FF00FF</color>
@@ -40,12 +30,8 @@
     <color name="backup">#ff6090</color>
     <color name="child_activity">#8bc34a</color>
     <color name="color_progress">#303F9F</color>
-    <color name="color_progress_bg">#FFFFFF</color>
-    <color name="colorDigi">#45b6b0</color>
     //button color option
     <color name="earthy_red">#95424E</color>
-    <color name="limeGreen">#9ab10a</color>
-    <color name="springYellow">#FDE79D</color>
 
 
     <integer-array name="androidcolors">
@@ -76,6 +62,5 @@
     <color name="ucrop_color_statusbar">@color/light_grey</color>
     <color name="ucrop_color_widget_active">@color/primaryColor</color>
 
-    <color name="white_trans">#00FFFFFF</color>
 
 </resources>

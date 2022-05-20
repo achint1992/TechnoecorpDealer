@@ -9,7 +9,7 @@ import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.technoecorp.gorilladealer.databinding.ActivityPdfBinding
-
+@SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : AppCompatActivity() {
     private var _binding: ActivityPdfBinding? = null
     private val binding: ActivityPdfBinding get() =  _binding!!

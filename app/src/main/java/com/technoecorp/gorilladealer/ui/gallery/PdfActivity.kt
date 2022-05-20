@@ -1,5 +1,6 @@
 package com.technoecorp.gorilladealer.ui.gallery
 
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.net.Uri
 import android.os.Bundle
@@ -9,7 +10,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.ActivityPdfBinding
-
+@SuppressLint("SetJavaScriptEnabled")
 class PdfActivity : AppCompatActivity() {
     private var _binding: ActivityPdfBinding? = null
     private val binding: ActivityPdfBinding get() = _binding!!

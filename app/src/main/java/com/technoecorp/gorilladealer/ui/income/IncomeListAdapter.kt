@@ -2,10 +2,8 @@ package com.technoecorp.gorilladealer.ui.income
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +40,8 @@ class IncomeListAdapter(private val context: Context) :
             dealerListItemBinding.phoneText.text = dealer.mobileNo
             val state = dealer.state?.stateName ?: "NA"
             val city = dealer.city?.cityName ?: "NA"
-            dealerListItemBinding.locationText.text = "$city $state"
+            dealerListItemBinding.locationText.text =
+                context.getString(R.string.city_state, city, state)
 
             val random = randomObj.nextInt(androidColors.size)
             dealerListItemBinding.ivAvatar.text = dealer.name.substring(0, 1)
