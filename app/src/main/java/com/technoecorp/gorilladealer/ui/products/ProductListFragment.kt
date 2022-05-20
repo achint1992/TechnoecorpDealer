@@ -69,24 +69,31 @@ class ProductListFragment : Fragment() {
         )
     }
 
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
+        }
+    }
+
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.products.collectLatest { result ->
                 when (result) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing)
-                            customDialogClass.show()
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(result.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         result.data?.status?.let {
                             if (it) {
                                 productAdapter.submitList(result.data?.data)
@@ -103,19 +110,14 @@ class ProductListFragment : Fragment() {
             viewModel.paymentLink.collectLatest { result ->
                 when (result) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing)
-                            customDialogClass.show()
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(result.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         result.data?.status?.let {
                             if (it) {
                                 val bundle = bundleOf(

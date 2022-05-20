@@ -13,9 +13,8 @@ class LoginViewModelFactoryModule {
     @Provides
     fun providesLiveViewModelFactory(
         loginDealerUseCase: LoginDealerUseCase,
-        preferenceDatastore: PreferencesRepository
     ): LoginViewModelFactory {
-        return LoginViewModelFactory(loginDealerUseCase, preferenceDatastore)
+        return LoginViewModelFactory(loginDealerUseCase)
     }
 
 }

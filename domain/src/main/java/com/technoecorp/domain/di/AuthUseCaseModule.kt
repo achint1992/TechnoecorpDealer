@@ -1,7 +1,6 @@
 package com.technoecorp.domain.di
 
 import com.technoecorp.domain.repository.IAuthRepository
-import com.technoecorp.domain.repository.IDealerRepository
 import com.technoecorp.domain.usecase.auth.LoginDealerUseCase
 import com.technoecorp.domain.usecase.auth.RegisterDealerUseCase
 import com.technoecorp.domain.usecase.auth.VerifyUserUseCase

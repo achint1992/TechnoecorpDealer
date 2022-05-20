@@ -2,7 +2,6 @@ package com.technoecorp.domain.usecase.dealer
 
 import com.technoecorp.domain.ResultWrapper
 import com.technoecorp.domain.domainmodel.request.StateWiseDealerCountRequest
-import com.technoecorp.domain.domainmodel.response.dealer.citylist.CityWiseCountResponse
 import com.technoecorp.domain.domainmodel.response.dealer.statelist.StateWiseCountResponse
 import com.technoecorp.domain.repository.IDealerRepository
 

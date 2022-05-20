@@ -211,6 +211,18 @@ class KycFragment : Fragment() {
         }
     }
 
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
+        }
+    }
+
     fun isValidationProfile(): Boolean {
         when {
             dealer.email.equals("", true) -> {
@@ -252,14 +264,10 @@ class KycFragment : Fragment() {
             kycViewModel.updateKyc.collectLatest { result ->
                 when (result) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         result.data?.status?.let {
                             if (it) {
                                 dealer.kycDetail = result.data?.data
@@ -276,9 +284,7 @@ class KycFragment : Fragment() {
                         }
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(result.message)
                     }
                     else -> {

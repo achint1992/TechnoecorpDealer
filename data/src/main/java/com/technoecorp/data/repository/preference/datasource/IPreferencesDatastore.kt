@@ -1,10 +1,7 @@
 package com.technoecorp.data.repository.preference.datasource
 
 import androidx.datastore.preferences.core.Preferences
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
-import java.lang.reflect.Type
-import kotlin.reflect.KClass
 
 interface IPreferencesDatastore {
 

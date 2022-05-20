@@ -24,7 +24,6 @@ import com.github.drjacky.imagepicker.ImagePicker
 import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.gson.Gson
-import com.technoecorp.data.repository.preference.datasource.PreferenceDatastore
 import com.technoecorp.domain.ResultWrapper
 import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.domain.domainmodel.request.DealerAnalyticalRequest
@@ -244,26 +243,31 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.createWithdrawalRequest(WithdrawalMoneyRequest(dealer.dealerId))
     }
 
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
+        }
+    }
 
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             dashboardViewModel.withDrawlResponse.collectLatest {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(it.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         it.data?.status?.let { status ->
                             if (status) {
                                 requireContext().showShortToast(getString(R.string.withdrawal_request_success))
@@ -272,7 +276,9 @@ class DashboardFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {}
+                    else -> {
+                        Timber.d("Is in else block")
+                    }
                 }
             }
         }
@@ -281,20 +287,14 @@ class DashboardFragment : Fragment() {
             dashboardViewModel.dashboardAnalytics.collectLatest { dealerAnalysis ->
                 when (dealerAnalysis) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(dealerAnalysis.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         if (dealerAnalysis.data?.status!!) {
                             dealerAnalysis.data?.let {
                                 dashboardViewModel.saveDashboardResponse(it)
@@ -313,7 +313,7 @@ class DashboardFragment : Fragment() {
                         }
                     }
                     else -> {
-
+                        Timber.d("Is in else block")
                     }
                 }
             }
@@ -323,20 +323,14 @@ class DashboardFragment : Fragment() {
             dashboardViewModel.updateProfilePic.collectLatest {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(it.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         it.data?.status?.let { bool ->
                             if (bool) {
                                 refreshImage(it.data?.data?.data?.dealer?.profilePic!!)
@@ -347,7 +341,7 @@ class DashboardFragment : Fragment() {
                         }
                     }
                     else -> {
-
+                        Timber.d("Is in else block")
                     }
                 }
             }

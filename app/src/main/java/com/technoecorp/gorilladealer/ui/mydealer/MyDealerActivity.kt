@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -78,25 +79,32 @@ class MyDealerActivity : AppCompatActivity() {
 
     }
 
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
+        }
+    }
+
+
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.stateList.collectLatest {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         (this@MyDealerActivity).showShortToast(it.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         val list: ArrayList<StateWiseCount> = ArrayList()
                         val activeUsers: Int = latestDashboard.data.activeDealer
                         val deactiveUsers: Int = latestDashboard.data.deactiveDealer
@@ -133,14 +141,10 @@ class MyDealerActivity : AppCompatActivity() {
             viewModel.cityList.collectLatest {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         val list: ArrayList<CityWiseCount> = ArrayList()
                         stateWiseCount?.let { data ->
                             list.add(
@@ -165,12 +169,11 @@ class MyDealerActivity : AppCompatActivity() {
 
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         (this@MyDealerActivity).showShortToast(it.message)
                     }
-                    else -> {}
+                    else -> {
+                    }
 
                 }
             }
@@ -182,9 +185,7 @@ class MyDealerActivity : AppCompatActivity() {
         val city: Int? = if (cityWiseCount.cityId > 0) cityWiseCount.cityId else null
         this.cityWiseCount = cityWiseCount
         lifecycleScope.launchWhenCreated {
-            if (!customDialogClass.isShowing) {
-                customDialogClass.show()
-            }
+            showDialog()
             val data = viewModel.getDealerList(
                 DealerFilterRequest(
                     dealer.dealerId,
@@ -196,10 +197,8 @@ class MyDealerActivity : AppCompatActivity() {
             )
             when (data) {
                 is ResultWrapper.Success -> {
-                    if (customDialogClass.isShowing) {
-                        customDialogClass.dismiss()
-                    }
-                    data.data?.status?.let {check->
+                    dismissDialog()
+                    data.data?.status?.let { check ->
                         if (check) {
                             val intent =
                                 Intent(this@MyDealerActivity, IncomeListActivity::class.java)
@@ -219,12 +218,11 @@ class MyDealerActivity : AppCompatActivity() {
                     }
                 }
                 is ResultWrapper.Error -> {
-                    if (customDialogClass.isShowing) {
-                        customDialogClass.dismiss()
-                    }
+                    dismissDialog()
                     (this@MyDealerActivity).showShortToast(data.message)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
 

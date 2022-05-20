@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -65,11 +66,17 @@ class LoginFragment : Fragment() {
                 requireContext().showShortToast(getString(R.string.require_internet))
             }
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            val isLoggedIn = loginViewModel.shouldNavigateToDashBoard()
-            if (isLoggedIn) {
-                //   binding.root.findNavController().navigate()
-            }
+    }
+
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
         }
     }
 
@@ -78,20 +85,14 @@ class LoginFragment : Fragment() {
             loginViewModel.loginResponse.collectLatest {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(it.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         it.data?.status?.let { res ->
                             if (res) {
                                 val bundle = bundleOf("ref" to it.data?.refId, "id" to it.data?.id)
@@ -99,6 +100,9 @@ class LoginFragment : Fragment() {
                                     .navigate(R.id.action_loginFragment_to_otpFragment, bundle)
                             }
                         }
+                    }
+                    else -> {
+                        Timber.d("Is in else block")
                     }
                 }
                 binding.loginButton.isClickable = true

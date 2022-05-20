@@ -8,12 +8,10 @@ import com.technoecorp.domain.ResultWrapper
 import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.domain.domainmodel.data.Kyc
 import com.technoecorp.domain.domainmodel.response.dealer.kyc.KycResponse
-import com.technoecorp.domain.repository.ICompanyDataRepository
 import com.technoecorp.domain.usecase.dealer.UpdateKYCUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class KycViewModel(
     private var updateKYCUseCase: UpdateKYCUseCase,

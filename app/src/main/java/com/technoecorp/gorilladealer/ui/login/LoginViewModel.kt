@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private var loginDealerUseCase: LoginDealerUseCase,
-    private var preferenceDatastore: PreferencesRepository
+    private var loginDealerUseCase: LoginDealerUseCase
 ) : ViewModel() {
 
     private var _loginResponse: MutableStateFlow<ResultWrapper<LoginResponse>> =
@@ -35,16 +34,5 @@ class LoginViewModel(
         }
     }
 
-    suspend fun shouldNavigateToDashBoard(): Boolean {
-        val data = viewModelScope.async {
-            val loggedIn =
-                preferenceDatastore.getData(PreferenceDatastore.LOGGED_IN, false).take(1).first()
-            val verified =
-                preferenceDatastore.getData(PreferenceDatastore.VERIFIED, false).take(1).first()
-
-            loggedIn && verified
-        }
-        return data.await()
-    }
 
 }
