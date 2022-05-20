@@ -31,16 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- <ImageView
-             android:layout_width="@dimen/_35sdp"
-             android:layout_height="@dimen/_35sdp"
-             android:layout_marginStart="@dimen/_7sdp"
-             android:contentDescription="@string/img"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toTopOf="parent"
-             tools:src="@tools:sample/avatars" />
- -->
+
         <LinearLayout
             android:id="@+id/infoLinear"
             android:layout_width="0dp"

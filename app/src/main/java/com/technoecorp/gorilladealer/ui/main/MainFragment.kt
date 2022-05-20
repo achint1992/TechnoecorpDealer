@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,10 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.FragmentMainBinding
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
@@ -112,22 +108,22 @@ class MainFragment : Fragment() {
 
         FirebaseDynamicLinks.getInstance()
             .getDynamicLink(requireActivity().intent)
-            .addOnSuccessListener(requireActivity(),
-                OnSuccessListener<PendingDynamicLinkData?> { pendingDynamicLinkData ->
-                    // Get deep link from result (may be null if no link is found)
-                    var deepLink: Uri? = null
-                    if (pendingDynamicLinkData != null) {
-                        deepLink = pendingDynamicLinkData.link
-                        val referLink = deepLink.toString()
-                        try {
-                            val referId = referLink.substring(referLink.lastIndexOf("=") + 1)
-                            saveReferCode(referId)
-                        } catch (e: Exception) {
-                        }
+            .addOnSuccessListener(requireActivity())
+            { pendingDynamicLinkData ->
+                // Get deep link from result (may be null if no link is found)
+                val deepLink: Uri?
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+                    val referLink = deepLink.toString()
+                    try {
+                        val referId = referLink.substring(referLink.lastIndexOf("=") + 1)
+                        saveReferCode(referId)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                })
-            .addOnFailureListener(requireActivity(),
-                OnFailureListener { e -> Timber.w("Dynamic links ${e.message}") })
+                }
+            }
+            .addOnFailureListener(requireActivity()) { e -> Timber.w("Dynamic links ${e.message}") }
 
     }
 
@@ -173,13 +169,18 @@ class MainFragment : Fragment() {
             R.anim.fade_out
         )
         slideAnim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationStart(animation: Animation) {
+                //animation Starts here
+            }
+
             override fun onAnimationEnd(animation: Animation) {
                 ViewCompat.animate(binding.view6).alpha(1f)
                 ViewCompat.animate(binding.tvSwitch).alpha(1f)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationRepeat(animation: Animation) {
+                //animation if repeat
+            }
         })
         binding.linear.startAnimation(slideAnim)
         expandAnimation.addListener({

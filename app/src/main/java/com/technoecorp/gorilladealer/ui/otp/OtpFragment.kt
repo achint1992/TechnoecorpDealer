@@ -69,30 +69,37 @@ class OtpFragment : Fragment() {
         }
     }
 
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
+        }
+    }
+
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.otpResponse.collectLatest {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         dealerData()
                         binding.root.findNavController()
                             .navigate(R.id.action_otpFragment_to_dashboardActivity)
                         requireActivity().finish()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(it.message)
-                    } else ->{}
+                    }
+                    else -> {}
                 }
             }
         }

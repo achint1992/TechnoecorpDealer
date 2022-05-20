@@ -67,25 +67,31 @@ class GalleryFragment : Fragment() {
         viewModel.getGalleryData(type)
     }
 
+    private fun showDialog() {
+        if (!customDialogClass.isShowing) {
+            customDialogClass.show()
+        }
+    }
+
+    private fun dismissDialog() {
+        if (customDialogClass.isShowing) {
+            customDialogClass.dismiss()
+        }
+    }
+
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.gallery.collectLatest { result ->
                 when (result) {
                     is ResultWrapper.Loading -> {
-                        if (!customDialogClass.isShowing) {
-                            customDialogClass.show()
-                        }
+                        showDialog()
                     }
                     is ResultWrapper.Error -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         requireContext().showShortToast(result.message)
                     }
                     is ResultWrapper.Success -> {
-                        if (customDialogClass.isShowing) {
-                            customDialogClass.dismiss()
-                        }
+                        dismissDialog()
                         result.data?.status?.let {
                             if (it) {
                                 when (type) {
@@ -103,15 +109,20 @@ class GalleryFragment : Fragment() {
                         }
 
                     }
+                    else -> {
+                        Timber.d("Is in else block")
+                    }
                 }
             }
         }
     }
 
     private fun checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (!PermissionUtils.checkStorage(requireContext())) {
-                PermissionUtils.requestStorage(requestPermissionLauncher)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            when {
+                !PermissionUtils.checkStorage(requireContext()) -> {
+                    PermissionUtils.requestStorage(requestPermissionLauncher)
+                }
             }
         }
     }

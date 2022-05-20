@@ -9,7 +9,6 @@ import com.amazonaws.regions.Region
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.CannedAccessControlList
-import com.technoecorp.domain.domainmodel.request.UpdateProfilePicRequest
 import com.technoecorp.gorilladealer.BuildConfig
 import com.technoecorp.gorilladealer.extensions.showShortExceptionToast
 import timber.log.Timber
@@ -62,6 +61,7 @@ class S3Uploader(private var applicationContext: Context) {
             }
 
             override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {
+                //Progress Update
             }
 
             override fun onError(id: Int, ex: java.lang.Exception) {

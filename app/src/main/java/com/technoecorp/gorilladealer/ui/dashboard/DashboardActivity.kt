@@ -85,20 +85,21 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
     }
 
+    private fun goBack() {
+        if (navController.currentDestination?.id != R.id.dashboardFragment) {
+            navController.navigateUp()
+        }
+    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 binding.drawer.closeDrawer(GravityCompat.START)
                 return true
             }
             R.id.menu_Kyc -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 navController.navigate(R.id.action_dashboardFragment_to_kycFragment)
                 binding.drawer.closeDrawer(GravityCompat.START)
                 return true
@@ -114,17 +115,13 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 return true
             }
             R.id.menu_edit -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 navController.navigate(R.id.action_dashboardFragment_to_editProfileFragment)
                 binding.drawer.closeDrawer(GravityCompat.START)
                 return true
             }
             R.id.menu_video -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 val bundle =
                     bundleOf("type" to "video")
                 navController.navigate(R.id.action_dashboardFragment_to_galleryFragment, bundle)
@@ -132,9 +129,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 return true
             }
             R.id.menu_photo -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 val bundle =
                     bundleOf("type" to "photo")
                 navController.navigate(R.id.action_dashboardFragment_to_galleryFragment, bundle)
@@ -142,9 +137,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 return true
             }
             R.id.menu_pdf -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 val bundle =
                     bundleOf("type" to "pdf")
                 navController.navigate(R.id.action_dashboardFragment_to_galleryFragment, bundle)
@@ -152,9 +145,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 return true
             }
             R.id.menu_policy -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 val bundle =
                     bundleOf("title" to getString(R.string.policy_title), "url" to Constants.policy)
                 navController.navigate(R.id.action_dashboardFragment_to_webViewActivity, bundle)
@@ -162,9 +153,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 return true
             }
             R.id.menu_terms -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 val bundle =
                     bundleOf("title" to getString(R.string.terms_title), "url" to Constants.terms)
                 navController.navigate(R.id.action_dashboardFragment_to_webViewActivity, bundle)
@@ -172,9 +161,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 return true
             }
             R.id.menu_payment -> {
-                if (navController.currentDestination?.id != R.id.dashboardFragment) {
-                    navController.navigateUp()
-                }
+                goBack()
                 navController.navigate(R.id.action_dashboardFragment_to_productListFragment)
                 binding.drawer.closeDrawer(GravityCompat.START)
                 return true

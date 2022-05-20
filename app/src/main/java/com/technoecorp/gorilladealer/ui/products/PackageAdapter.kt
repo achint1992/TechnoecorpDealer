@@ -1,21 +1,17 @@
 package com.technoecorp.gorilladealer.ui.products
 
-import android.content.ComponentCallbacks
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.technoecorp.domain.domainmodel.response.company.product.Package
-import com.technoecorp.domain.domainmodel.response.company.product.Product
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.PackageListItemBinding
-import com.technoecorp.gorilladealer.databinding.ProductListItemBinding
 
 class PackageAdapter(private var context: Context,private var  callback: (Int, Int, String) -> Unit) :
     ListAdapter<Package, PackageAdapter.PackageViewHolder>(PackageDiffUtil()) {
