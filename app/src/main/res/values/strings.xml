@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">TechnoecorpDealer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <!--Login-->
+    <string name="login">Login</string>
+    <string name="mobile">Mobile Number</string>
+    <string name="signup">Sign Up</string>
+    <string name="app_logo">Application Logo</string>
+    <!--Login End-->
+
+
+    <!--Register-->
+    <string name="ref_code">Ref Code</string>
+    <string name="email">Email Address</string>
+    <string name="username">User Name</string>
+    <!--Register End-->
+
+
+    <!--Common-->
+    <string name="loading">Please Wait..</string>
+    <string name="back">Back</string>
+    <string name="policy_title">Privacy Policy</string>
+    <string name="terms_title">Terms Of Use</string>
+    <string name="img">*</string>
+    <string name="export">Export</string>
+    <string name="download">Download</string>
+    <string name="selected">Selected</string>
+    <string name="require_internet">Require Internet Connection</string>
+    <string name="forget_password">Forget Password ?</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="withdrawal_request_success">Withdrawal Request Created Successfully..</string>
+    <!--Common End-->
+
+    <!--Dashboard-->
+
+    <string name="home">Home</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="how_activate">How to Activate?</string>
+    <string name="leads">Dealer Certificate</string>
+    <string name="idCard">Id Card</string>
+    <string name="kycDetails">KYC Details</string>
+    <string name="payment">Purchase Product</string>
+    <string name="testimonials">Testimonials</string>
+    <string name="photo_downloads">Photo Downloads</string>
+    <string name="video_downloads">Video Downloads</string>
+    <string name="pdf_downloads">PDF Downloads</string>
+    <string name="policies">Policies</string>
+    <string name="terms">Terms of Use</string>
+    <string name="support">Support</string>
+    <string name="dealer">Dealer</string>
+    <string name="logout">Logout</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="panel">Business</string>
+    <string name="withdrawal_request">Withdrawal</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--Dashboard Ends-->
+
+    <string name="active_dealer">Active User</string>
+    <string name="deactive_dealer">De-active User</string>
+
+    <!--Edit Profile-->
+    <string name="alternate_mobile">Alternate Mobile Number</string>
+    <string name="address">Address</string>
+    <string name="father_name">Father/Husband Name</string>
+    <string name="dob">Date of birth (dd/mm/yyyy)</string>
+    <string name="district">District</string>
+    <string name="pincode">Pincode</string>
+    <string name="country_code">Country Code</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="save">Save</string>
+    <string name="update_success">Profile Updated Successfully</string>
+    <!--Edit Profile Ends-->
+
+    <string name="account_holder">Account Holder Name</string>
+    <string name="account_number">Account Number</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="branch_name">Branch Name</string>
+    <string name="ifsc">IFSC</string>
+    <string name="account_type">Account Type</string>
+    <string name="upload_address">Upload Add. Proof</string>
+    <string name="upload_id">Upload Id Proof</string>
+    <string name="verify_kyc">Verify KYC</string>
+
+    <string name="confirm_account_number">Confirm Account Number</string>
+
+    <string name="buy_at">Buy At %1$s</string>
+</resources>

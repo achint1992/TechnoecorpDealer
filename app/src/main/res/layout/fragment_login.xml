@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/startingPoint"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:id="@+id/logoImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/startingPoint"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/_130sdp"
+                    android:layout_height="@dimen/_130sdp"
+                    android:contentDescription="@string/app_logo"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/surksha_img" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/logoImage"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <View
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.6"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/mobile"
+                    android:textColorHint="@color/selector_hint_text_input_black_layout"
+                    app:boxStrokeColor="@color/selector_stroke_text_input_black_layout"
+                    app:shapeAppearance="?shapeAppearanceSmallComponent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/userMobile"
+                        style="@style/MobileInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/forgotPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="end"
+                    android:text="@string/forget_password"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/login" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/registerButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:backgroundTint="@color/secondaryColor"
+                    android:text="@string/signup"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</ScrollView>
+

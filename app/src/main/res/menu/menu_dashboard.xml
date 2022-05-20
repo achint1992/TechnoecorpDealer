@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/menu_home"
+            android:icon="@drawable/home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/menu_edit"
+            android:icon="@drawable/profile_menu"
+            android:title="@string/edit_profile" />
+        <item
+            android:id="@+id/menu_certificate"
+            android:icon="@drawable/distributor__cert"
+            android:title="@string/leads" />
+        <item
+            android:id="@+id/menu_idCard"
+            android:icon="@drawable/id_card"
+            android:title="@string/idCard" />
+        <item
+            android:id="@+id/menu_Kyc"
+            android:icon="@drawable/customer"
+            android:title="@string/kycDetails" />
+
+        <item
+            android:id="@+id/menu_photo"
+            android:icon="@drawable/ic_photo"
+            android:title="@string/photo_downloads" />
+
+
+        <item
+            android:id="@+id/menu_video"
+            android:icon="@drawable/ic_video"
+            android:title="@string/video_downloads" />
+
+        <item
+            android:id="@+id/menu_pdf"
+            android:icon="@drawable/ic_pdf"
+            android:title="@string/pdf_downloads" />
+
+        <item
+            android:id="@+id/menu_payment"
+            android:icon="@drawable/piggy"
+            android:title="@string/payment" />
+
+
+        <item
+            android:id="@+id/menu_policy"
+            android:icon="@drawable/compliant"
+            android:title="@string/policies" />
+
+        <item
+            android:id="@+id/menu_terms"
+            android:icon="@drawable/note"
+            android:title="@string/terms" />
+
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/logout"
+            android:title="@string/logout" />
+    </group>
+
+</menu>

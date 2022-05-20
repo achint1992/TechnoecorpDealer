@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = versions.jvm
+    }
+}
+
+dependencies {
+    implementation project(path: ':domain')
+
+
+    implementation deps.androidx_core
+    implementation deps.app_compat
+    implementation deps.material
+    testImplementation deps.junit
+    androidTestImplementation deps.junit_android
+    androidTestImplementation deps.espresso
+    //Retrofit
+    implementation deps.retrofit
+    implementation deps.gson_convertor
+    implementation deps.retrofit_logger
+
+    implementation deps.dagger
+    kapt deps.dagger_compiler
+    implementation deps.preference_datastore
+
+}

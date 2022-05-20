@@ -1,0 +1,111 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'androidx.navigation.safeargs'
+}
+android {
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        applicationId appData.applicationId
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+        versionCode appData.versionCode
+        versionName appData.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            buildConfigField "String", "AWS_KEY", "\"${releaseKeys.aws_key}\""
+            buildConfigField "String", "AWS_SECRET", "\"${releaseKeys.aws_secret}\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "AWS_KEY", "\"${debugKeys.aws_key}\""
+            buildConfigField "String", "AWS_SECRET", "\"${debugKeys.aws_secret}\""
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = versions.jvm
+    }
+
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(path: ':data')
+    implementation project(path: ':domain')
+
+    implementation deps.androidx_core
+    implementation deps.app_compat
+    implementation deps.material
+    implementation deps.constraint_layout
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation deps.junit
+    androidTestImplementation deps.junit_android
+    androidTestImplementation deps.espresso
+    // ViewModel
+    implementation deps.view_model
+    // LiveData
+    implementation deps.live_data
+    //coroutines
+    implementation deps.coroutines
+    //retrofit
+    implementation deps.retrofit
+    implementation deps.gson_convertor
+    implementation deps.retrofit_logger
+    //dagger 2
+    implementation deps.dagger
+    kapt deps.dagger_compiler
+    //Navigation
+    implementation deps.navigation_fragment
+    implementation deps.navigation_ui
+    //ssp and sdp
+    implementation deps.spd
+    implementation deps.ssp
+
+    //circular image view
+    implementation deps.circular_image
+    //s3
+    implementation deps.s3_core
+    implementation deps.s3_sdk
+    implementation deps.s3_ddb
+    implementation deps.cwac_security
+    implementation deps.common_logging
+    //glide
+    implementation deps.glide
+    kapt deps.glide_compiler
+    //firebase
+    implementation platform(deps.firebase_bom)
+    implementation deps.firebase_dynamic_links
+    implementation deps.firebase_analytics
+
+    //Timber
+    implementation deps.timber
+    //Preference DataStore
+    implementation deps.preference_datastore
+
+    //image cropper
+    implementation deps.image_cropper
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += [
+                "-Xjvm-default=all",
+        ]
+    }
+}

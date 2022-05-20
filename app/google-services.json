@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "626376491302",
+    "project_id": "dealerapp-bc08c",
+    "storage_bucket": "dealerapp-bc08c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626376491302:android:1360d67caf8739956581e7",
+        "android_client_info": {
+          "package_name": "com.technoecorp.gorilladealer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626376491302-6qp9j07ovb45ha77egd3ukfl0sjjq3dc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.technoecorp.gorilladealer",
+            "certificate_hash": "bcf5bb413b2a56314eb7336739c254726bbf2ce7"
+          }
+        },
+        {
+          "client_id": "626376491302-c5u85vtahl66e9v3m2jvecuhlqc2rnlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVYns0bc0wY5OZ-keB3QnX4c8oWIYiKEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626376491302-c5u85vtahl66e9v3m2jvecuhlqc2rnlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

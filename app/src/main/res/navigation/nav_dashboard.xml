@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_dashboard"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.technoecorp.gorilladealer.ui.dashboard.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard">
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_incomeListActivity"
+            app:destination="@id/incomeListActivity" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_myDealerActivity"
+            app:destination="@id/myDealerActivity" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_kycFragment"
+            app:destination="@id/kycFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_webViewActivity"
+            app:destination="@id/webViewActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/incomeListActivity"
+        android:name="com.technoecorp.gorilladealer.ui.income.IncomeListActivity"
+        android:label="activity_income_list"
+        tools:layout="@layout/activity_income_list" />
+    <activity
+        android:id="@+id/myDealerActivity"
+        android:name="com.technoecorp.gorilladealer.ui.mydealer.MyDealerActivity"
+        android:label="activity_my_dealer"
+        tools:layout="@layout/activity_my_dealer" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.technoecorp.gorilladealer.ui.profile.EditProfileFragment"
+        android:label="EditProfileFragment"
+        tools:layout="@layout/fragment_edit_profile">
+        <action
+            android:id="@+id/action_editProfileFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/kycFragment"
+        android:name="com.technoecorp.gorilladealer.ui.kyc.KycFragment"
+        android:label="KycFragment"
+        tools:layout="@layout/fragment_kyc">
+        <action
+            android:id="@+id/action_kycFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.technoecorp.gorilladealer.ui.gallery.GalleryFragment"
+        android:label="fragment_gallery"
+        tools:layout="@layout/fragment_gallery">
+        <action
+            android:id="@+id/action_galleryFragment_to_youtubeActivity"
+            app:destination="@id/youtubeActivity" />
+        <action
+            android:id="@+id/action_galleryFragment_to_imageFullActivity"
+            app:destination="@id/imageFullActivity" />
+        <action
+            android:id="@+id/action_galleryFragment_to_pdfActivity"
+            app:destination="@id/pdfActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/youtubeActivity"
+        android:name="com.technoecorp.gorilladealer.ui.gallery.YoutubeActivity"
+        android:label="YoutubeActivity"
+        tools:layout="@layout/activity_youtube" />
+    <activity
+        android:id="@+id/imageFullActivity"
+        android:name="com.technoecorp.gorilladealer.ui.gallery.ImageFullActivity"
+        android:label="ImageFullActivity"
+        tools:layout="@layout/activity_image_full" />
+    <activity
+        android:id="@+id/pdfActivity"
+        android:name="com.technoecorp.gorilladealer.ui.gallery.PdfActivity"
+        android:label="PdfActivity"
+        tools:layout="@layout/activity_pdf" />
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.technoecorp.gorilladealer.ui.products.ProductListFragment"
+        android:label="ProductListFragment"
+        tools:layout="@layout/fragment_product_list" >
+        <action
+            android:id="@+id/action_productListFragment_to_webViewActivity"
+            app:destination="@id/webViewActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/webViewActivity"
+        tools:layout="@layout/activity_pdf"
+        android:name="com.technoecorp.gorilladealer.ui.webview.WebViewActivity"
+        android:label="WebViewActivity" />
+
+</navigation>

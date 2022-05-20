@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:color="@color/white" android:state_focused="true" />
+<item android:color="@color/white" android:state_first="true" />
+<item android:alpha="0.87" android:color="?attr/colorOnSurface" android:state_hovered="true" />
+<item android:alpha="0.5" android:color="?attr/colorOnSurface" android:state_enabled="false" />
+<item android:alpha="0.5" android:color="?attr/colorOnSurface" />
+</selector>

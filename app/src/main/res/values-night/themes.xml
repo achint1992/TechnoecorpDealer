@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TechnoecorpDealer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@drawable/background_gorilla</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:navigationBarColor">@color/primaryLightColor</item>
+        <item name="textInputStyle">@style/MyCustomEditTextStyle</item>
+        <item name="editTextStyle">
+            @style/MyCustomEditTextStyle
+        </item>
+        <item name="android:textViewStyle">@style/TextViewNormal</item>
+        <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+       <!-- Customize your theme here. -->
+    </style>
+
+</resources>
