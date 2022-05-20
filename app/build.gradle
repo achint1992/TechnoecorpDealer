@@ -2,9 +2,19 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id "org.sonarqube"
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs'
 }
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "achint1992_NewsAppHilt"
+        property "sonar.organization", "achint1992"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
 android {
     compileSdk versions.compileSdk
 

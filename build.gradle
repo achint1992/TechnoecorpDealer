@@ -46,7 +46,8 @@ buildscript {
             "coroutine_core_version"      : "1.6.1",
             "google_services_version"     : "4.3.10",
             "image_cropper_version"       : "2.1.15",
-            "common_logging_version"      : "1.1"
+            "common_logging_version"      : "1.1",
+            "sonar_gradle_plugin_version" : "3.3"
     ]
 
     ext.deps = [
@@ -86,12 +87,13 @@ buildscript {
             "coroutine_core"        : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutine_core_version}",
             "google_services"       : "com.google.gms:google-services:${versions.google_services_version}",
             "image_cropper"         : "com.github.Drjacky:ImagePicker:${versions.image_cropper_version}",
-            "common_logging"        : "commons-logging:commons-logging-api:${versions.common_logging_version}"
+            "common_logging"        : "commons-logging:commons-logging-api:${versions.common_logging_version}",
+            "sonar_plugin"          : "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${versions.sonar_gradle_plugin_version}",
     ]
     dependencies {
         classpath(deps.navigation_safe_args)
         classpath deps.google_services
-
+        classpath deps.sonar_plugin
     }
 }
 
