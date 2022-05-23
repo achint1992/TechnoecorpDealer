@@ -30,6 +30,7 @@ import com.technoecorp.gorilladealer.extensions.showShortExceptionToast
 import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.PermissionUtils
 import com.technoecorp.gorilladealer.utils.S3Uploader
 import com.technoecorp.gorilladealer.utils.Validator
@@ -138,7 +139,7 @@ class KycFragment : Fragment() {
         }
 
     private fun updateImageView(path: String?, imageView: ImageView) {
-        Glide.with(requireContext()).load(path).apply(
+        Glide.with(requireContext()).load(path).skipMemoryCache(true).apply(
             RequestOptions.diskCacheStrategyOf(
                 DiskCacheStrategy.NONE
             )
@@ -193,19 +194,23 @@ class KycFragment : Fragment() {
                 requireContext().showShortToast("Kindly Upload Address and Id Proof")
             }
             if (addProofCheck && accountNameCheck && ifscCodeCheck && idProofCheck && matchCheck && bankNameCheck && branchNameCheck) {
-                kycViewModel.uploadKycDetail(
-                    Kyc(
-                        dealer.dealerId,
-                        binding.accountName.text.toString(),
-                        binding.accountNumber.text.toString(),
-                        binding.bankName.text.toString(),
-                        binding.branchName.text.toString(),
-                        binding.ifscCode.text.toString(),
-                        accountType,
-                        addProofPath,
-                        idProofPath
+                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                    kycViewModel.uploadKycDetail(
+                        Kyc(
+                            dealer.dealerId,
+                            binding.accountName.text.toString(),
+                            binding.accountNumber.text.toString(),
+                            binding.bankName.text.toString(),
+                            binding.branchName.text.toString(),
+                            binding.ifscCode.text.toString(),
+                            accountType,
+                            addProofPath,
+                            idProofPath
+                        )
                     )
-                )
+                } else {
+                    requireContext().showShortToast(getString(R.string.require_internet))
+                }
             }
 
         }

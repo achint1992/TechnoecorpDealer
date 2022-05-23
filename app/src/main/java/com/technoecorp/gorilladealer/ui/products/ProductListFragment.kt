@@ -18,6 +18,7 @@ import com.technoecorp.gorilladealer.databinding.FragmentProductListBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
@@ -45,7 +46,11 @@ class ProductListFragment : Fragment() {
         _dealer = (requireActivity().application as TechnoecorpApplication).getUpdateDealer()
         initViews()
         initCollector()
-        viewModel.findProducts()
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            viewModel.findProducts()
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
         return binding.root
     }
 
@@ -58,15 +63,19 @@ class ProductListFragment : Fragment() {
     }
 
     private fun getPaymentLink(productId: Int, packageId: Int, packagePrice: String) {
-        viewModel.createPaymentLink(
-            PaymentLinkRequest(
-                productId,
-                packageId,
-                dealer.dealerId,
-                1,
-                packagePrice.toInt()
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            viewModel.createPaymentLink(
+                PaymentLinkRequest(
+                    productId,
+                    packageId,
+                    dealer.dealerId,
+                    1,
+                    packagePrice.toInt()
+                )
             )
-        )
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
     }
 
     private fun showDialog() {

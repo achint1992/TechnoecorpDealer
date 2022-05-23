@@ -15,6 +15,7 @@ import com.technoecorp.gorilladealer.databinding.FragmentOtpBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +59,11 @@ class OtpFragment : Fragment() {
         binding.btnContinue.setOnClickListener {
             if (Validator.validOtpCodeWithLength(binding.otpText, 4)) {
                 val code = binding.otpText.text.toString()
-                viewModel.verifyDealer(DealerValidationRequest(refId, _id, code))
+                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                    viewModel.verifyDealer(DealerValidationRequest(refId, _id, code))
+                } else {
+                    requireContext().showShortToast(getString(R.string.require_internet))
+                }
             }
         }
     }

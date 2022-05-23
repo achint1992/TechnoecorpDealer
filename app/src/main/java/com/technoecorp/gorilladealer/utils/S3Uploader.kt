@@ -10,6 +10,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.technoecorp.gorilladealer.BuildConfig
+import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.extensions.showShortExceptionToast
 import timber.log.Timber
 import java.io.File
@@ -24,8 +25,8 @@ class S3Uploader(private var applicationContext: Context) {
     fun init() {
         try {
             val secret: String =
-                BuildConfig.AWS_SECRET
-            val key: String = BuildConfig.AWS_KEY
+                applicationContext.getString(R.string.aws_secret)
+            val key: String = applicationContext.getString(R.string.aws_key)
             credentials = BasicAWSCredentials(key, secret)
             s3 = AmazonS3Client(credentials)
             s3.setRegion(Region.getRegion(Regions.AP_SOUTH_1))

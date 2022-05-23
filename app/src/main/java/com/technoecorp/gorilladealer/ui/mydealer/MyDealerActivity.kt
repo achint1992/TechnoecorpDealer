@@ -21,11 +21,11 @@ import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
 import com.technoecorp.gorilladealer.ui.income.IncomeListActivity
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -61,7 +61,11 @@ class MyDealerActivity : AppCompatActivity() {
         setLatestDashboard()
         initView()
         initCollector()
-        viewModel.getStateWiseCount(StateWiseDealerCountRequest(dealer.referCode!!))
+        if (NetworkChecker.isInternetAvailable(this)) {
+            viewModel.getStateWiseCount(StateWiseDealerCountRequest(dealer.referCode!!))
+        } else {
+            this.showShortToast(getString(R.string.require_internet))
+        }
     }
 
     private fun initView() {
@@ -186,43 +190,53 @@ class MyDealerActivity : AppCompatActivity() {
         this.cityWiseCount = cityWiseCount
         lifecycleScope.launchWhenCreated {
             showDialog()
-            val data = viewModel.getDealerList(
-                DealerFilterRequest(
-                    dealer.dealerId,
-                    dealer.referCode!!,
-                    isActive,
-                    state,
-                    city
+            if (NetworkChecker.isInternetAvailable(this@MyDealerActivity)) {
+                val data = viewModel.getDealerList(
+                    DealerFilterRequest(
+                        dealer.dealerId,
+                        dealer.referCode!!,
+                        isActive,
+                        state,
+                        city
+                    )
                 )
-            )
-            when (data) {
-                is ResultWrapper.Success -> {
-                    dismissDialog()
-                    data.data?.status?.let { check ->
-                        if (check) {
-                            val intent =
-                                Intent(this@MyDealerActivity, IncomeListActivity::class.java)
-                            intent.putExtra("stateId", state)
-                            intent.putExtra("cityId", city)
-                            intent.putExtra("isActive", isActive)
-                            if (isActive) {
-                                intent.putExtra("title", "Active User, ${cityWiseCount.cityName}")
+                when (data) {
+                    is ResultWrapper.Success -> {
+                        dismissDialog()
+                        data.data?.status?.let { check ->
+                            if (check) {
+                                val intent =
+                                    Intent(this@MyDealerActivity, IncomeListActivity::class.java)
+                                intent.putExtra("stateId", state)
+                                intent.putExtra("cityId", city)
+                                intent.putExtra("isActive", isActive)
+                                if (isActive) {
+                                    intent.putExtra(
+                                        "title",
+                                        "Active User, ${cityWiseCount.cityName}"
+                                    )
+                                } else {
+                                    intent.putExtra(
+                                        "title",
+                                        "Deactive User, ${cityWiseCount.cityName}"
+                                    )
+                                }
+                                intent.putExtra("dealers", Gson().toJson(data.data?.data))
+                                startActivity(intent)
                             } else {
-                                intent.putExtra("title", "Deactive User, ${cityWiseCount.cityName}")
+                                (this@MyDealerActivity).showShortToast(data.data?.message)
                             }
-                            intent.putExtra("dealers", Gson().toJson(data.data?.data))
-                            startActivity(intent)
-                        } else {
-                            (this@MyDealerActivity).showShortToast(data.data?.message)
                         }
                     }
+                    is ResultWrapper.Error -> {
+                        dismissDialog()
+                        (this@MyDealerActivity).showShortToast(data.message)
+                    }
+                    else -> {
+                    }
                 }
-                is ResultWrapper.Error -> {
-                    dismissDialog()
-                    (this@MyDealerActivity).showShortToast(data.message)
-                }
-                else -> {
-                }
+            } else {
+                this@MyDealerActivity.showShortToast(getString(R.string.require_internet))
             }
         }
 
@@ -233,12 +247,17 @@ class MyDealerActivity : AppCompatActivity() {
         this.stateWiseCount = stateWiseCount
 
         if (stateWiseCount.stateId != -1) {
-            viewModel.getCityWiseCount(
-                CityWiseDealerCountRequest(
-                    dealer.referCode!!,
-                    stateWiseCount.stateId
+            if (NetworkChecker.isInternetAvailable(this)) {
+
+                viewModel.getCityWiseCount(
+                    CityWiseDealerCountRequest(
+                        dealer.referCode!!,
+                        stateWiseCount.stateId
+                    )
                 )
-            )
+            } else {
+                this.showShortToast(getString(R.string.require_internet))
+            }
         } else {
             val tempList: ArrayList<CityWiseCount> = ArrayList()
             tempList.add(

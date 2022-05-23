@@ -19,6 +19,7 @@ import com.technoecorp.gorilladealer.databinding.FragmentEditProfileBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.Validator
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -80,8 +81,11 @@ class EditProfileFragment : Fragment() {
         binding.userCountry.setAdapter(countryAdapter)
         binding.userState.setAdapter(stateAdapter)
         binding.userCity.setAdapter(cityAdapter)
-        viewModel.getCountry()
-
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            viewModel.getCountry()
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
         binding.userCountry.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
             if (item is Country) {
@@ -91,7 +95,11 @@ class EditProfileFragment : Fragment() {
                 cityId = -1
                 binding.userCity.setText("")
                 binding.userState.setText("")
-                viewModel.getState(countryId)
+                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                    viewModel.getState(countryId)
+                } else {
+                    requireContext().showShortToast(getString(R.string.require_internet))
+                }
             } else {
                 countryId = -1
             }
@@ -104,7 +112,11 @@ class EditProfileFragment : Fragment() {
                 stateId = state.stateId
                 cityId = -1
                 binding.userCity.setText("")
-                viewModel.getCity(stateId)
+                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                    viewModel.getCity(stateId)
+                } else {
+                    requireContext().showShortToast(getString(R.string.require_internet))
+                }
             } else {
                 stateId = -1
             }
@@ -153,21 +165,25 @@ class EditProfileFragment : Fragment() {
                 checkAddress && checkDistrict && emailCheck && userAltMobileCheck && fatherNameCheck
                         && pinCodeCheck && dobCheck && countryCheck && stateCheck && cityCheck
             if (check) {
-                viewModel.updateProfile(
-                    UpdateProfileRequest(
-                        dealer.dealerId,
-                        binding.userEmail.text.toString(),
-                        binding.userAltMobile.text.toString(),
-                        binding.userAddress.text.toString(),
-                        binding.userDistrict.text.toString(),
-                        countryId,
-                        stateId,
-                        cityId,
-                        binding.userPincode.text.toString(),
-                        binding.fatherName.text.toString(),
-                        binding.dob.text.toString()
+                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                    viewModel.updateProfile(
+                        UpdateProfileRequest(
+                            dealer.dealerId,
+                            binding.userEmail.text.toString(),
+                            binding.userAltMobile.text.toString(),
+                            binding.userAddress.text.toString(),
+                            binding.userDistrict.text.toString(),
+                            countryId,
+                            stateId,
+                            cityId,
+                            binding.userPincode.text.toString(),
+                            binding.fatherName.text.toString(),
+                            binding.dob.text.toString()
+                        )
                     )
-                )
+                } else {
+                    requireContext().showShortToast(getString(R.string.require_internet))
+                }
             }
         }
     }
