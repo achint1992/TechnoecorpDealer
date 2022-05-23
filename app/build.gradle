@@ -30,15 +30,15 @@ android {
 
     buildTypes {
         release {
-            buildConfigField "String", "AWS_KEY", "\"${releaseKeys.aws_key}\""
-            buildConfigField "String", "AWS_SECRET", "\"${releaseKeys.aws_secret}\""
+         //   buildConfigField "String", "AWS_KEY", "\"${releaseKeys.aws_key}\""
+         //   buildConfigField "String", "AWS_SECRET", "\"${releaseKeys.aws_secret}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {
+        /*debug {
             buildConfigField "String", "AWS_KEY", "\"${debugKeys.aws_key}\""
             buildConfigField "String", "AWS_SECRET", "\"${debugKeys.aws_secret}\""
-        }
+        }*/
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TechnoecorpDealer</string>
+    <string name="app_name">Technoecorp</string>
     <!--Login-->
     <string name="login">Login</string>
     <string name="mobile">Mobile Number</string>
@@ -90,5 +90,8 @@
 
     <string name="buy_at">Buy At %1$s</string>
     <string name="city_state">%1$s, %2$s</string>
+
+    <string name="aws_secret">1Smwtd5OcYHPqwf5af/xJdTBZ4NK5VXF0982J4SR</string>
+    <string name="aws_key">AKIAZXDI73G4NTYV3TXR</string>
 
 </resources>

@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.technoecorp.domain.ResultWrapper
+import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.FragmentGalleryBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.PermissionUtils
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -64,7 +66,11 @@ class GalleryFragment : Fragment() {
                 binding.galleryRecycler.adapter = photoPdfAdapter
             }
         }
-        viewModel.getGalleryData(type)
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            viewModel.getGalleryData(type)
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
     }
 
     private fun showDialog() {

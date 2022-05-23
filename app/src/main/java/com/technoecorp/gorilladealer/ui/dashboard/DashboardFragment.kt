@@ -37,6 +37,7 @@ import com.technoecorp.gorilladealer.extensions.showShortToast
 import com.technoecorp.gorilladealer.extensions.toDashboardAnalytics
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
+import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.PermissionUtils
 import com.technoecorp.gorilladealer.utils.S3Uploader
 import kotlinx.coroutines.CoroutineScope
@@ -100,12 +101,16 @@ class DashboardFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = dashboardAdapter
 
-        dashboardViewModel.createListForDashboardData(
-            DealerAnalyticalRequest(
-                dealerId = dealer.dealerId,
-                referCode = dealer.referCode!!
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            dashboardViewModel.createListForDashboardData(
+                DealerAnalyticalRequest(
+                    dealerId = dealer.dealerId,
+                    referCode = dealer.referCode!!
+                )
             )
-        )
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
 
         binding.facebookButton.setOnClickListener {
             val intent = Intent(
@@ -159,7 +164,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             if (!PermissionUtils.checkStorage(requireContext())) {
                 PermissionUtils.requestStorage(requestPermissionLauncher)
             } else {
@@ -211,16 +216,20 @@ class DashboardFragment : Fragment() {
 
 
     private fun selectImageFromGallery() {
-        val intent = ImagePicker.with(requireActivity())
-            .galleryOnly()
-            .crop() //Crop image(Optional), Check Customization for more option
-            .maxResultSize(
-                1080,
-                1080
-            ) //Final image resolution will be less than 1080 x 1080(Optional)
-            .cropSquare()
-            .createIntent()
-        launcher.launch(intent)
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            val intent = ImagePicker.with(requireActivity())
+                .galleryOnly()
+                .crop() //Crop image(Optional), Check Customization for more option
+                .maxResultSize(
+                    1080,
+                    1080
+                ) //Final image resolution will be less than 1080 x 1080(Optional)
+                .cropSquare()
+                .createIntent()
+            launcher.launch(intent)
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
     }
 
 
@@ -240,7 +249,11 @@ class DashboardFragment : Fragment() {
     }
 
     private fun requestWithdrawalRequest() {
-        dashboardViewModel.createWithdrawalRequest(WithdrawalMoneyRequest(dealer.dealerId))
+        if (NetworkChecker.isInternetAvailable(requireContext())) {
+            dashboardViewModel.createWithdrawalRequest(WithdrawalMoneyRequest(dealer.dealerId))
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+        }
     }
 
     private fun showDialog() {
@@ -349,7 +362,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun refreshImage(path: String) {
-        Glide.with(requireContext()).load(path).apply(
+        Glide.with(requireContext()).load(path).skipMemoryCache(true).apply(
             RequestOptions.diskCacheStrategyOf(
                 DiskCacheStrategy.NONE
             )
