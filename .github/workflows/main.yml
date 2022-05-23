@@ -64,6 +64,6 @@ jobs:
           serviceAccountJson: service_account.json
           packageName: com.technoecorp.gorilladealer
           releaseFile: app/build/outputs/bundle/release/app-release.aab
-          track: beta
+          track: production
           whatsNewDirectory: whatsnew/
 
