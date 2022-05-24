@@ -58,7 +58,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun initView() {
-        customDialogClass = CustomDialogClass(requireContext())
+        customDialogClass = CustomDialogClass(requireActivity())
         countryAdapter =
             AutoCompleteAdapter(
                 requireContext(), R.layout.state_selected_item, R.id.stateName,

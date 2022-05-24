@@ -5,11 +5,11 @@ import android.app.DownloadManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.ActivityPdfBinding
+
 @SuppressLint("SetJavaScriptEnabled")
 class PdfActivity : AppCompatActivity() {
     private var _binding: ActivityPdfBinding? = null

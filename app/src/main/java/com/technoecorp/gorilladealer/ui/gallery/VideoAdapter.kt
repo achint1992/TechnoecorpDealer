@@ -1,7 +1,6 @@
 package com.technoecorp.gorilladealer.ui.gallery
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf

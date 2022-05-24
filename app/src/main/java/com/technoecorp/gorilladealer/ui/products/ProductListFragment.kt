@@ -55,7 +55,7 @@ class ProductListFragment : Fragment() {
     }
 
     private fun initViews() {
-        customDialogClass = CustomDialogClass(requireContext())
+        customDialogClass = CustomDialogClass(requireActivity())
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         productAdapter = ProductAdapter(requireContext(), ::getPaymentLink)
