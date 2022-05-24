@@ -39,6 +39,8 @@ class OtpViewModel(
                                 otpData.data?.data?.data?.dealer
                             )
 
+                            Timber.e(otpData.data?.data?.data?.dealer.toString())
+
                             datastore.saveData(
                                 PreferenceDatastore.DEALER_ID,
                                 otpData.data?.data?.data?.dealer?.dealerId!!

@@ -54,7 +54,7 @@ class GalleryFragment : Fragment() {
     }
 
     private fun initView() {
-        customDialogClass = CustomDialogClass(requireContext())
+        customDialogClass = CustomDialogClass(requireActivity())
         binding.galleryRecycler.layoutManager = GridLayoutManager(requireContext(), 2)
         when (type) {
             "video" -> {

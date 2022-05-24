@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Patterns
 import android.widget.AutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
-import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern

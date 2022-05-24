@@ -85,7 +85,7 @@ class KycFragment : Fragment() {
 
 
     private fun initViews() {
-        customDialogClass = CustomDialogClass(requireContext())
+        customDialogClass = CustomDialogClass(requireActivity())
         val type = arrayOf("Saving", "Credit", "Current")
         val adapter = ArrayAdapter(
             requireContext(),
@@ -110,7 +110,7 @@ class KycFragment : Fragment() {
         if (!isValidationProfile()) {
             showMaterialDialog()
         }
-
+     //   Timber.e(dealer.kycDetail.toString())
         if (dealer.kycDetail != null) {
             updateKycOnUI()
         }

@@ -11,16 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.technoecorp.domain.ResultWrapper
 import com.technoecorp.gorilladealer.R
-import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
-import com.technoecorp.gorilladealer.utils.NetworkChecker
-import com.technoecorp.gorilladealer.utils.Validator
 import com.technoecorp.gorilladealer.databinding.FragmentLoginBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
+import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.technoecorp.gorilladealer.utils.NetworkChecker
+import com.technoecorp.gorilladealer.utils.Validator
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 

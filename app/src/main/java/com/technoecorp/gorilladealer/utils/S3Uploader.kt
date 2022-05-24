@@ -9,7 +9,6 @@ import com.amazonaws.regions.Region
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.CannedAccessControlList
-import com.technoecorp.gorilladealer.BuildConfig
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.extensions.showShortExceptionToast
 import timber.log.Timber
