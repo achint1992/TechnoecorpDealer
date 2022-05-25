@@ -18,10 +18,7 @@ import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
 import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
 import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.Validator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 

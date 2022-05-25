@@ -85,38 +85,16 @@ class EditProfileFragment : Fragment() {
         }
         binding.userCountry.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
-            if (item is Country) {
-                countryId = item.id
-                stateId = -1
-                cityId = -1
-                binding.userCity.setText("")
-                binding.userState.setText("")
-                if (checkNetwork())
-                    viewModel.getState(countryId)
-            } else {
-                countryId = -1
-            }
+            countryId = setItemData(item)
         }
 
         binding.userState.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
-            if (item is State) {
-                stateId = item.stateId
-                cityId = -1
-                binding.userCity.setText("")
-                if (checkNetwork())
-                    viewModel.getCity(stateId)
-            } else {
-                stateId = -1
-            }
+            stateId = setItemData(item)
         }
         binding.userCity.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
-            cityId = if (item is City) {
-                item.cityId
-            } else {
-                -1
-            }
+            cityId = setItemData(item)
         }
         dealer.country?.let {
             binding.userCountry.setText(it.countryName)
@@ -149,10 +127,10 @@ class EditProfileFragment : Fragment() {
             val stateCheck =
                 Validator.validDropDownSelection(binding.userState, "State", stateId, -1)
             val cityCheck = Validator.validDropDownSelection(binding.userCity, "City", cityId, -1)
-            val check =
-                checkAddress && checkDistrict && emailCheck && userAltMobileCheck && fatherNameCheck
-                        && pinCodeCheck && dobCheck && countryCheck && stateCheck && cityCheck
-            if (check && checkNetwork()) {
+
+            if (checkAddress && checkDistrict && emailCheck && userAltMobileCheck && fatherNameCheck
+                && pinCodeCheck && dobCheck && countryCheck && stateCheck && cityCheck && checkNetwork()
+            ) {
                 viewModel.updateProfile(
                     UpdateProfileRequest(
                         dealer.dealerId,
@@ -169,6 +147,37 @@ class EditProfileFragment : Fragment() {
                     )
                 )
 
+            }
+        }
+    }
+
+    private fun setItemData(item: Any): Int {
+        when (item) {
+            is Country -> {
+                countryId = item.id
+                stateId = -1
+                cityId = -1
+                binding.userCity.setText("")
+                binding.userState.setText("")
+                if (checkNetwork()) {
+                    viewModel.getState(countryId)
+                }
+                return item.id
+            }
+            is State -> {
+                stateId = item.stateId
+                cityId = -1
+                binding.userCity.setText("")
+                if (checkNetwork()) {
+                    viewModel.getCity(stateId)
+                }
+                return item.stateId
+            }
+            is City -> {
+                return item.cityId
+            }
+            else -> {
+                return -1
             }
         }
     }

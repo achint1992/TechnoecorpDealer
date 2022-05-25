@@ -9,7 +9,6 @@ import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.domain.domainmodel.request.DealerValidationRequest
 import com.technoecorp.domain.domainmodel.response.auth.otp.OtpResponse
 import com.technoecorp.domain.usecase.auth.VerifyUserUseCase
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first

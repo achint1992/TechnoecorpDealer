@@ -23,9 +23,6 @@ import com.technoecorp.gorilladealer.ui.main.SharedViewModelFactory
 import com.technoecorp.gorilladealer.utils.Constants
 import com.technoecorp.gorilladealer.utils.Constants.Companion.certificate
 import com.technoecorp.gorilladealer.utils.Constants.Companion.dealerCard
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
