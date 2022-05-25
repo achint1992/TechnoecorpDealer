@@ -44,7 +44,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
@@ -289,9 +288,7 @@ class DashboardFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {
-                        Timber.d("Is in else block")
-                    }
+
                 }
             }
         }
@@ -325,9 +322,7 @@ class DashboardFragment : Fragment() {
                             requireContext().showShortToast(dealerAnalysis.data?.message)
                         }
                     }
-                    else -> {
-                        Timber.d("Is in else block")
-                    }
+
                 }
             }
         }
@@ -353,9 +348,7 @@ class DashboardFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {
-                        Timber.d("Is in else block")
-                    }
+
                 }
             }
         }

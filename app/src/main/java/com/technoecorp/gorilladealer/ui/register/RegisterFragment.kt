@@ -52,7 +52,7 @@ class RegisterFragment : Fragment() {
 
     private fun getReferCode() {
         CoroutineScope(Dispatchers.Main).launch {
-            var referCode = registerViewModel.getDealerReferCode()
+            val referCode = registerViewModel.getDealerReferCode()
             binding.refCode.setText(referCode)
         }
     }
@@ -119,9 +119,6 @@ class RegisterFragment : Fragment() {
                             customDialogClass.dismiss()
                         }
                         requireContext().showShortToast(it.message)
-                    }
-                    is ResultWrapper.Started -> {
-
                     }
                 }
                 binding.registerButton.isClickable = true

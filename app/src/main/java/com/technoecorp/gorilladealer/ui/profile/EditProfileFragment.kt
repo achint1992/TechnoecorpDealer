@@ -222,9 +222,6 @@ class EditProfileFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {
-                    }
-
                 }
             }
         }
@@ -250,10 +247,6 @@ class EditProfileFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {
-
-                    }
-
                 }
             }
         }
@@ -278,9 +271,6 @@ class EditProfileFragment : Fragment() {
                                 requireContext().showShortToast(it.message)
                             }
                         }
-                    }
-                    else -> {
-
                     }
 
                 }
@@ -308,9 +298,6 @@ class EditProfileFragment : Fragment() {
                                 requireContext().showShortToast(result.data?.message)
                             }
                         }
-                    }
-                    else -> {
-
                     }
 
                 }

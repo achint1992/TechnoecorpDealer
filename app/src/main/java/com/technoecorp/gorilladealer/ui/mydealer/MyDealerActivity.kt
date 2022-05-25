@@ -135,7 +135,6 @@ class MyDealerActivity : AppCompatActivity() {
                         }
                         stateAdapter.submitList(coloredList)
                     }
-                    else -> {}
                 }
             }
 
@@ -175,8 +174,6 @@ class MyDealerActivity : AppCompatActivity() {
                     is ResultWrapper.Error -> {
                         dismissDialog()
                         (this@MyDealerActivity).showShortToast(it.message)
-                    }
-                    else -> {
                     }
 
                 }
@@ -232,8 +229,6 @@ class MyDealerActivity : AppCompatActivity() {
                         dismissDialog()
                         (this@MyDealerActivity).showShortToast(data.message)
                     }
-                    else -> {
-                    }
                 }
             } else {
                 this@MyDealerActivity.showShortToast(getString(R.string.require_internet))
@@ -279,8 +274,6 @@ class MyDealerActivity : AppCompatActivity() {
     private fun setLatestDashboard() {
         CoroutineScope(Dispatchers.IO).launch {
             latestDashboard = viewModel.getLastDashboardData()!!
-
-
         }
     }
 

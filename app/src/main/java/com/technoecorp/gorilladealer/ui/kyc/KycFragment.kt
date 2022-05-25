@@ -63,7 +63,7 @@ class KycFragment : Fragment() {
     private var idProofPath = ""
     private var addProofPath = ""
 
-    var dialog: AlertDialog? = null
+    private var dialog: AlertDialog? = null
 
 
     override fun onCreateView(
@@ -148,7 +148,7 @@ class KycFragment : Fragment() {
 
     private fun updateKycOnUI() {
         dealer.kycDetail?.let {
-            Timber.e("data is ${it.toString()}")
+            Timber.e("data is $it")
         }
         dealer.kycDetail?.userVerificationId?.let {
             idProofPath = it
@@ -228,7 +228,7 @@ class KycFragment : Fragment() {
         }
     }
 
-    fun isValidationProfile(): Boolean {
+    private fun isValidationProfile(): Boolean {
         when {
             dealer.email.equals("", true) -> {
                 return false
@@ -292,9 +292,7 @@ class KycFragment : Fragment() {
                         dismissDialog()
                         requireContext().showShortToast(result.message)
                     }
-                    else -> {
 
-                    }
                 }
             }
         }
@@ -316,7 +314,7 @@ class KycFragment : Fragment() {
         }
     }
 
-    fun showMaterialDialog() {
+    private fun showMaterialDialog() {
         dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Profile Update")
             .setMessage("Your profile details are not updated. You won't be able to receive any payment without updating it.")

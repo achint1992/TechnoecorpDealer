@@ -127,7 +127,7 @@ class MainFragment : Fragment() {
 
     }
 
-    fun saveReferCode(referCode: String) {
+    private fun saveReferCode(referCode: String) {
         CoroutineScope(Dispatchers.Main).launch {
             mainViewModel.saveReferCode(referCode)
         }
