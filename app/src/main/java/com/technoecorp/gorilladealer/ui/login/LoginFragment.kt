@@ -18,7 +18,6 @@ import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
 import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.Validator
 import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -97,9 +96,6 @@ class LoginFragment : Fragment() {
                                     .navigate(R.id.action_loginFragment_to_otpFragment, bundle)
                             }
                         }
-                    }
-                    else -> {
-                        Timber.d("Is in else block")
                     }
                 }
                 binding.loginButton.isClickable = true

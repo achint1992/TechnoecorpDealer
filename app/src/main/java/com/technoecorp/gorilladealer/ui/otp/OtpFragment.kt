@@ -104,7 +104,6 @@ class OtpFragment : Fragment() {
                         dismissDialog()
                         requireContext().showShortToast(it.message)
                     }
-                    else -> {}
                 }
             }
         }

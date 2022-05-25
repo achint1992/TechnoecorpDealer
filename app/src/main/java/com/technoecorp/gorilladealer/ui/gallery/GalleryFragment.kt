@@ -115,9 +115,7 @@ class GalleryFragment : Fragment() {
                         }
 
                     }
-                    else -> {
-                        Timber.d("Is in else block")
-                    }
+
                 }
             }
         }

@@ -111,7 +111,6 @@ class ProductListFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {}
                 }
             }
         }
@@ -143,7 +142,6 @@ class ProductListFragment : Fragment() {
                             }
                         }
                     }
-                    else -> {}
                 }
             }
         }

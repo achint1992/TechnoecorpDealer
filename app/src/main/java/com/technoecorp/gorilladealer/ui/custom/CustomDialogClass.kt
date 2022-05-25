@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Window
 import android.view.WindowInsets
-import android.view.WindowManager
 import com.technoecorp.gorilladealer.R
 import timber.log.Timber
 
@@ -20,14 +19,14 @@ import timber.log.Timber
 /**
  * Created by achint on 3/25/17.
  */
-class CustomDialogClass(var c: Context) : Dialog(c) {
+@Suppress("DEPRECATION")
+class CustomDialogClass(private var c: Context) : Dialog(c) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.loader_layout)
         Timber.e("Coming Here")
-        val wm = c.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         Timber.e("Coming Here 1")
         setCancelable(false)
@@ -46,7 +45,7 @@ class CustomDialogClass(var c: Context) : Dialog(c) {
         }
     }
 
-    fun getScreenWidth(activity: Activity): Int {
+    private fun getScreenWidth(activity: Activity): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics = activity.windowManager.currentWindowMetrics
             val insets: Insets = windowMetrics.windowInsets
@@ -59,7 +58,7 @@ class CustomDialogClass(var c: Context) : Dialog(c) {
         }
     }
 
-    fun getScreenHeight(activity: Activity): Int {
+    private fun getScreenHeight(activity: Activity): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics = activity.windowManager.currentWindowMetrics
             val insets: Insets = windowMetrics.windowInsets
