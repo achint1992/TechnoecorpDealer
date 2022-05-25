@@ -281,11 +281,9 @@ class DashboardFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         it.data?.status?.let { status ->
-                            if (status) {
-                                requireContext().showShortToast(getString(R.string.withdrawal_request_success))
-                            } else {
-                                requireContext().showShortToast(it.data?.message)
-                            }
+                            val message: String? =
+                                if (status) getString(R.string.withdrawal_request_success) else it.data?.message
+                            requireContext().showShortToast(message)
                         }
                     }
 
@@ -305,21 +303,23 @@ class DashboardFragment : Fragment() {
                     }
                     is ResultWrapper.Success -> {
                         dismissDialog()
-                        if (dealerAnalysis.data?.status!!) {
-                            dealerAnalysis.data?.let {
-                                dashboardViewModel.saveDashboardResponse(it)
+
+                        dealerAnalysis.data?.status?.let { check ->
+                            if (!check) {
+                                requireContext().showShortToast(dealerAnalysis.data?.message)
+                                return@let
                             }
+                            dashboardViewModel.saveDashboardResponse(dealerAnalysis.data!!)
                             val dashboardData = dealerAnalysis.data?.toDashboardAnalytics()
                             dealerAnalysis.data?.data?.recentDealers?.let {
                                 dashboardViewModel.saveRecentUsers(it)
                             }
-                            if (dashboardData!!.isEmpty()) {
-                                requireContext().showShortToast("Unable to Populate List")
-                            } else {
+                            dashboardData?.let {
                                 dashboardAdapter.submitList(dashboardData)
+                                if (dashboardData.isEmpty()) {
+                                    requireContext().showShortToast("Unable to Populate List")
+                                }
                             }
-                        } else {
-                            requireContext().showShortToast(dealerAnalysis.data?.message)
                         }
                     }
 
@@ -340,12 +340,12 @@ class DashboardFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         it.data?.status?.let { bool ->
-                            if (bool) {
-                                refreshImage(it.data?.data?.data?.dealer?.profilePic!!)
-                                dashboardViewModel.saveData(it.data?.data?.data?.dealer!!)
-                            } else {
+                            if (!bool) {
                                 requireContext().showShortToast(it.data?.message)
+                                return@let
                             }
+                            refreshImage(it.data?.data?.data?.dealer?.profilePic!!)
+                            dashboardViewModel.saveData(it.data?.data?.data?.dealer!!)
                         }
                     }
 

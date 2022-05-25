@@ -22,7 +22,6 @@ import com.technoecorp.gorilladealer.ui.custom.CustomDialogClass
 import com.technoecorp.gorilladealer.utils.NetworkChecker
 import com.technoecorp.gorilladealer.utils.Validator
 import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 import javax.inject.Inject
 
 class EditProfileFragment : Fragment() {
@@ -215,11 +214,11 @@ class EditProfileFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         result.data?.let {
-                            if (it.status) {
-                                countryAdapter.addItems(it.data)
-                            } else {
+                            if (!it.status) {
                                 requireContext().showShortToast(it.message)
+                                return@let
                             }
+                            countryAdapter.addItems(it.data)
                         }
                     }
                 }
@@ -239,12 +238,11 @@ class EditProfileFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         result.data?.let {
-                            if (it.status) {
-                                Timber.e("Data size for State is ${it.data.size}")
-                                stateAdapter.addItems(it.data)
-                            } else {
+                            if (!it.status) {
                                 requireContext().showShortToast(it.message)
+                                return@let
                             }
+                            stateAdapter.addItems(it.data)
                         }
                     }
                 }
@@ -265,11 +263,11 @@ class EditProfileFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         result.data?.let {
-                            if (it.status) {
-                                cityAdapter.addItems(it.data)
-                            } else {
+                            if (!it.status) {
                                 requireContext().showShortToast(it.message)
+                                return@let
                             }
+                            cityAdapter.addItems(it.data)
                         }
                     }
 
@@ -290,13 +288,13 @@ class EditProfileFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         result.data?.status?.let {
-                            if (it) {
-                                viewModel.saveData(result.data?.data?.data?.dealer!!)
-                                requireContext().showShortToast(getString(R.string.update_success))
-                                binding.root.findNavController().navigateUp()
-                            } else {
+                            if (!it) {
                                 requireContext().showShortToast(result.data?.message)
+                                return@let
                             }
+                            viewModel.saveData(result.data?.data?.data?.dealer!!)
+                            requireContext().showShortToast(getString(R.string.update_success))
+                            binding.root.findNavController().navigateUp()
                         }
                     }
 
