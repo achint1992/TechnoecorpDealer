@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.FragmentMainBinding
 import com.technoecorp.gorilladealer.ui.TechnoecorpApplication
@@ -59,19 +60,17 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         (requireActivity().application as TechnoecorpApplication).getMainSubComponent().inject(this)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[SharedViewModel::class.java]
-        dealerData()
-
+        mainViewModel.dealerData(::dealerData)
         initView()
         initAnimation()
         return binding.root
     }
 
-    private fun dealerData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            (requireActivity().application as TechnoecorpApplication).updateDealer(mainViewModel.dealerData())
+    private fun dealerData(updatedDealer: Dealer?) {
+        updatedDealer?.let {
+            (requireActivity().application as TechnoecorpApplication).updateDealer(it)
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -93,18 +92,7 @@ class MainFragment : Fragment() {
         binding.registerButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_mainFragment_to_registerFragment)
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            val isLoggedIn = mainViewModel.shouldNavigateToDashBoard()
-
-            if (isLoggedIn) {
-                binding.registerButton.visibility = View.INVISIBLE
-                binding.loginButton.visibility = View.INVISIBLE
-                delay(6000)
-                binding.registerButton.findNavController()
-                    .navigate(R.id.action_mainFragment_to_dashboardActivity)
-                requireActivity().finish()
-            }
-        }
+        mainViewModel.shouldNavigateToDashBoard(::navigateToDashboard)
 
         FirebaseDynamicLinks.getInstance()
             .getDynamicLink(requireActivity().intent)
@@ -117,7 +105,7 @@ class MainFragment : Fragment() {
                     val referLink = deepLink.toString()
                     try {
                         val referId = referLink.substring(referLink.lastIndexOf("=") + 1)
-                        saveReferCode(referId)
+                        mainViewModel.saveReferCode(referId)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -127,9 +115,16 @@ class MainFragment : Fragment() {
 
     }
 
-    private fun saveReferCode(referCode: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            mainViewModel.saveReferCode(referCode)
+    private fun navigateToDashboard(isLogin: Boolean) {
+        if (isLogin) {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.registerButton.visibility = View.INVISIBLE
+                binding.loginButton.visibility = View.INVISIBLE
+                delay(6000)
+                binding.registerButton.findNavController()
+                    .navigate(R.id.action_mainFragment_to_dashboardActivity)
+                requireActivity().finish()
+            }
         }
     }
 

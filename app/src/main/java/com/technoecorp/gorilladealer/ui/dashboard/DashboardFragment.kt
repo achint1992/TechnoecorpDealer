@@ -49,6 +49,7 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
 class DashboardFragment : Fragment() {
@@ -83,7 +84,7 @@ class DashboardFragment : Fragment() {
 
         initView()
         initCollector()
-        getRecentList()
+        dashboardViewModel.getRecentData(::recentDataRender)
         return binding.root
     }
 
@@ -362,37 +363,36 @@ class DashboardFragment : Fragment() {
         ).into(binding.profileImage)
     }
 
-    private fun getRecentList() {
-        CoroutineScope(Dispatchers.Main).launch {
-            dashboardRecent = dashboardViewModel.getRecentData()
-            if (dashboardRecent.isNotEmpty()) {
-                binding.textAnimation.visibility = View.VISIBLE
-                "Welcome! ${dashboardRecent[index]}".also { binding.userText.text = it }
-                val animation = AnimatorInflater.loadAnimator(requireContext(), R.animator.shake)
-                animation.apply {
-                    setTarget(binding.textAnimation)
-                    this.addListener({
-                        Timer().schedule(6000) {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                index++
-                                if (index >= dashboardRecent.size) {
-                                    index = 0
-                                }
-                                "Welcome! ${dashboardRecent[index]}".also {
-                                    binding.userText.text = it
-                                }
-                                animation.start()
-                            }
-
-                        }
-                    })
-                    this.start()
-                }
-            } else {
-                binding.textAnimation.visibility = View.INVISIBLE
-
-            }
+    private fun recentDataRender(data: ArrayList<String>) {
+        if (data.isEmpty()) {
+            binding.textAnimation.visibility = View.INVISIBLE
+            return
         }
+        this.dashboardRecent = data
+        binding.textAnimation.visibility = View.VISIBLE
+        "Welcome! ${dashboardRecent[index]}".also { binding.userText.text = it }
+        val animation = AnimatorInflater.loadAnimator(requireContext(), R.animator.shake)
+        animation.apply {
+            setTarget(binding.textAnimation)
+            this.addListener({
+                Timer().schedule(6000) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        index++
+                        if (index >= dashboardRecent.size) {
+                            index = 0
+                        }
+                        "Welcome! ${dashboardRecent[index]}".also {
+                            binding.userText.text = it
+                        }
+                        animation.start()
+                    }
+
+                }
+            })
+            this.start()
+        }
+
+
     }
 
     private fun shareIntent(referCodeText: String) {

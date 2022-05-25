@@ -45,7 +45,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         setContentView(binding.root)
         (application as TechnoecorpApplication).getMainSubComponent().injectToDashboard(this)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory)[SharedViewModel::class.java]
-        dealerData()
+        mainViewModel.dealerData(::getDealer)
         setSupportActionBar(binding.dashboardContent.toolbar)
         val toggle = ActionBarDrawerToggle(
             this,
@@ -78,11 +78,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
     }
 
-    private fun dealerData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            _dealer = mainViewModel.dealerData()
-            (application as TechnoecorpApplication).updateDealer(dealer)
-        }
+
+    private fun getDealer(updatedDealer: Dealer?) {
+        _dealer = updatedDealer
+        (application as TechnoecorpApplication).updateDealer(dealer)
     }
 
     private fun goBack() {
@@ -168,12 +167,10 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             }
             R.id.menu_logout -> {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                CoroutineScope(Dispatchers.Main).launch {
-                    mainViewModel.clearData()
-                    val intent = Intent(this@DashboardActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
+                mainViewModel.clearData()
+                val intent = Intent(this@DashboardActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
                 return true
             }
             else -> {

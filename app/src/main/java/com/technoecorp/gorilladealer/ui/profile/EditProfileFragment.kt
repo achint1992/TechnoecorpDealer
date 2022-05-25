@@ -80,25 +80,19 @@ class EditProfileFragment : Fragment() {
         binding.userCountry.setAdapter(countryAdapter)
         binding.userState.setAdapter(stateAdapter)
         binding.userCity.setAdapter(cityAdapter)
-        if (NetworkChecker.isInternetAvailable(requireContext())) {
+        if (checkNetwork()) {
             viewModel.getCountry()
-        } else {
-            requireContext().showShortToast(getString(R.string.require_internet))
         }
         binding.userCountry.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
             if (item is Country) {
-                val country: Country = item
-                countryId = country.id
+                countryId = item.id
                 stateId = -1
                 cityId = -1
                 binding.userCity.setText("")
                 binding.userState.setText("")
-                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                if (checkNetwork())
                     viewModel.getState(countryId)
-                } else {
-                    requireContext().showShortToast(getString(R.string.require_internet))
-                }
             } else {
                 countryId = -1
             }
@@ -107,15 +101,11 @@ class EditProfileFragment : Fragment() {
         binding.userState.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
             if (item is State) {
-                val state: State = item
-                stateId = state.stateId
+                stateId = item.stateId
                 cityId = -1
                 binding.userCity.setText("")
-                if (NetworkChecker.isInternetAvailable(requireContext())) {
+                if (checkNetwork())
                     viewModel.getCity(stateId)
-                } else {
-                    requireContext().showShortToast(getString(R.string.require_internet))
-                }
             } else {
                 stateId = -1
             }
@@ -123,8 +113,7 @@ class EditProfileFragment : Fragment() {
         binding.userCity.setOnItemClickListener { adapterView, _, i, _ ->
             val item: Any = adapterView.getItemAtPosition(i)
             cityId = if (item is City) {
-                val city: City = item
-                city.cityId
+                item.cityId
             } else {
                 -1
             }
@@ -163,27 +152,33 @@ class EditProfileFragment : Fragment() {
             val check =
                 checkAddress && checkDistrict && emailCheck && userAltMobileCheck && fatherNameCheck
                         && pinCodeCheck && dobCheck && countryCheck && stateCheck && cityCheck
-            if (check) {
-                if (NetworkChecker.isInternetAvailable(requireContext())) {
-                    viewModel.updateProfile(
-                        UpdateProfileRequest(
-                            dealer.dealerId,
-                            binding.userEmail.text.toString(),
-                            binding.userAltMobile.text.toString(),
-                            binding.userAddress.text.toString(),
-                            binding.userDistrict.text.toString(),
-                            countryId,
-                            stateId,
-                            cityId,
-                            binding.userPincode.text.toString(),
-                            binding.fatherName.text.toString(),
-                            binding.dob.text.toString()
-                        )
+            if (check && checkNetwork()) {
+                viewModel.updateProfile(
+                    UpdateProfileRequest(
+                        dealer.dealerId,
+                        binding.userEmail.text.toString(),
+                        binding.userAltMobile.text.toString(),
+                        binding.userAddress.text.toString(),
+                        binding.userDistrict.text.toString(),
+                        countryId,
+                        stateId,
+                        cityId,
+                        binding.userPincode.text.toString(),
+                        binding.fatherName.text.toString(),
+                        binding.dob.text.toString()
                     )
-                } else {
-                    requireContext().showShortToast(getString(R.string.require_internet))
-                }
+                )
+
             }
+        }
+    }
+
+    private fun checkNetwork(): Boolean {
+        return if (NetworkChecker.isInternetAvailable(requireContext())) {
+            true
+        } else {
+            requireContext().showShortToast(getString(R.string.require_internet))
+            false
         }
     }
 
