@@ -95,14 +95,13 @@ class DashboardViewModel(
         }
     }
 
-    suspend fun getRecentData(): ArrayList<String> {
-        val data = withContext(viewModelScope.coroutineContext) {
+    fun getRecentData(callback: (ArrayList<String>) -> Unit) {
+        viewModelScope.launch {
             val recentData = preferencesDatastore.getArrayObject<String>(
                 PreferenceDatastore.RECENT_LIST
             ).take(1).first()
-            recentData
+            callback(recentData)
         }
-        return data
     }
 
 

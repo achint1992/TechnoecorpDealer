@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MyDealerViewModel(
     private var getStateWiseDealerUseCase: GetStateWiseDealerUseCase,
@@ -63,23 +62,33 @@ class MyDealerViewModel(
         }
     }
 
-    suspend fun getDealerList(dealerFilterRequest: DealerFilterRequest): ResultWrapper<DealerFilterResponse> {
-        val data = withContext(viewModelScope.coroutineContext) {
+    fun getDealerList(
+        dealerFilterRequest: DealerFilterRequest,
+        callback: (ResultWrapper<DealerFilterResponse>, Int?, Int?, Boolean?) -> Unit
+    ) {
+        viewModelScope.launch {
             val response = filterDealerUseCase.execute(dealerFilterRequest)
-            response
+            callback(
+                response,
+                dealerFilterRequest.stateId,
+                dealerFilterRequest.cityId,
+                dealerFilterRequest.isActive
+            )
         }
-        return data
     }
 
 
-    suspend fun getLastDashboardData(): DashboardAnayliticsResponse? {
-        val data = withContext(viewModelScope.coroutineContext) {
+    fun getLastDashboardData(callback: (DashboardAnayliticsResponse?) -> Unit) {
+        viewModelScope.launch {
             val recentDashboard =
-                preferencesDatastore.getDataObject(PreferenceDatastore.DASHBOARD_RESPONSE,DashboardAnayliticsResponse::class.java)
+                preferencesDatastore.getDataObject(
+                    PreferenceDatastore.DASHBOARD_RESPONSE,
+                    DashboardAnayliticsResponse::class.java
+                )
                     .take(1).first()
-            recentDashboard
+            callback(recentDashboard)
         }
-        return data
+
     }
 
 

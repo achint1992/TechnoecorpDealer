@@ -14,6 +14,7 @@ import com.technoecorp.domain.domainmodel.request.DealerFilterRequest
 import com.technoecorp.domain.domainmodel.request.StateWiseDealerCountRequest
 import com.technoecorp.domain.domainmodel.response.dealer.citylist.CityWiseCount
 import com.technoecorp.domain.domainmodel.response.dealer.dashboard.DashboardAnayliticsResponse
+import com.technoecorp.domain.domainmodel.response.dealer.filter.DealerFilterResponse
 import com.technoecorp.domain.domainmodel.response.dealer.statelist.StateWiseCount
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.ActivityMyDealerBinding
@@ -58,7 +59,7 @@ class MyDealerActivity : AppCompatActivity() {
         if (_dealer == null) {
             finish()
         }
-        setLatestDashboard()
+        viewModel.getLastDashboardData(::setLatestDashboard)
         initView()
         initCollector()
         if (NetworkChecker.isInternetAvailable(this)) {
@@ -182,61 +183,74 @@ class MyDealerActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkId(_id: Int): Int? {
+        return if (_id > 0) _id else null
+    }
+
     private fun selectCity(cityWiseCount: CityWiseCount, stateId: Int, isActive: Boolean) {
-        val state: Int? = if (stateId > 0) stateId else null
-        val city: Int? = if (cityWiseCount.cityId > 0) cityWiseCount.cityId else null
+        val state: Int? = checkId(stateId)
+        val city: Int? = checkId(cityWiseCount.cityId)
         this.cityWiseCount = cityWiseCount
         lifecycleScope.launchWhenCreated {
-            showDialog()
-            if (NetworkChecker.isInternetAvailable(this@MyDealerActivity)) {
-                val data = viewModel.getDealerList(
-                    DealerFilterRequest(
-                        dealer.dealerId,
-                        dealer.referCode!!,
-                        isActive,
-                        state,
-                        city
-                    )
-                )
-                when (data) {
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        data.data?.status?.let { check ->
-                            if (check) {
-                                val intent =
-                                    Intent(this@MyDealerActivity, IncomeListActivity::class.java)
-                                intent.putExtra("stateId", state)
-                                intent.putExtra("cityId", city)
-                                intent.putExtra("isActive", isActive)
-                                if (isActive) {
-                                    intent.putExtra(
-                                        "title",
-                                        "Active User, ${cityWiseCount.cityName}"
-                                    )
-                                } else {
-                                    intent.putExtra(
-                                        "title",
-                                        "Deactive User, ${cityWiseCount.cityName}"
-                                    )
-                                }
-                                intent.putExtra("dealers", Gson().toJson(data.data?.data))
-                                startActivity(intent)
-                            } else {
-                                (this@MyDealerActivity).showShortToast(data.data?.message)
-                            }
-                        }
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        (this@MyDealerActivity).showShortToast(data.message)
-                    }
-                }
-            } else {
+            if (!NetworkChecker.isInternetAvailable(this@MyDealerActivity)) {
                 this@MyDealerActivity.showShortToast(getString(R.string.require_internet))
+                return@launchWhenCreated
             }
+            showDialog()
+            viewModel.getDealerList(
+                DealerFilterRequest(
+                    dealer.dealerId,
+                    dealer.referCode!!,
+                    isActive,
+                    state,
+                    city
+                ), ::renderDealerList
+            )
+
         }
 
     }
+
+    private fun renderDealerList(
+        data: ResultWrapper<DealerFilterResponse>,
+        state: Int?,
+        city: Int?,
+        isActive: Boolean?
+    ) {
+        when (data) {
+            is ResultWrapper.Success -> {
+                dismissDialog()
+                data.data?.status?.let { check ->
+                    if (!check) {
+                        (this@MyDealerActivity).showShortToast(data.data?.message)
+                        return@let
+                    }
+                    val intent =
+                        Intent(this@MyDealerActivity, IncomeListActivity::class.java)
+                    intent.putExtra("stateId", state)
+                    intent.putExtra("cityId", city)
+                    intent.putExtra("isActive", isActive)
+                    val title: String = when (isActive) {
+                        null -> "All User"
+                        true -> "Active User"
+                        false -> "Deactive User"
+                    }
+                    intent.putExtra(
+                        "title",
+                        "$title, ${cityWiseCount?.cityName}"
+                    )
+                    intent.putExtra("dealers", Gson().toJson(data.data?.data))
+                    startActivity(intent)
+
+                }
+            }
+            is ResultWrapper.Error -> {
+                dismissDialog()
+                (this@MyDealerActivity).showShortToast(data.message)
+            }
+        }
+    }
+
 
     private fun selectState(stateWiseCount: StateWiseCount) {
         cityWiseCountAdapter.submitStateId(stateWiseCount.stateId)
@@ -272,9 +286,9 @@ class MyDealerActivity : AppCompatActivity() {
 
     }
 
-    private fun setLatestDashboard() {
-        CoroutineScope(Dispatchers.IO).launch {
-            latestDashboard = viewModel.getLastDashboardData()!!
+    private fun setLatestDashboard(data:DashboardAnayliticsResponse?) {
+        data?.let {
+            this.latestDashboard=data
         }
     }
 

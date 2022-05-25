@@ -45,16 +45,13 @@ class RegisterFragment : Fragment() {
             ViewModelProvider(this, registerViewModelFactory)[RegisterViewModel::class.java]
 
         initView()
-        getReferCode()
+        registerViewModel.getDealerReferCode(::getReferCode)
         initCollector()
         return binding.root
     }
 
-    private fun getReferCode() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val referCode = registerViewModel.getDealerReferCode()
-            binding.refCode.setText(referCode)
-        }
+    private fun getReferCode(referCode: String) {
+        binding.refCode.setText(referCode)
     }
 
     private fun initView() {

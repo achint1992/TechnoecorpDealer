@@ -60,14 +60,14 @@ class RegisterViewModel(
         }
     }
 
-    suspend fun getDealerReferCode(): String {
-        val data: String = withContext(viewModelScope.coroutineContext) {
+    fun getDealerReferCode(callback: (String) -> Unit) {
+        viewModelScope.launch {
             val refercode =
                 preferencesDatastore.getData(PreferenceDatastore.REFER_CODE_DEEP_LINK, "")
                     .take(1).first()
-            refercode
+            callback(refercode)
         }
-        return data
+
     }
 
 }

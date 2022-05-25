@@ -67,13 +67,7 @@ class OtpFragment : Fragment() {
             }
         }
     }
-
-    private fun dealerData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            (requireActivity().application as TechnoecorpApplication).updateDealer(viewModel.dealerData())
-        }
-    }
-
+    
     private fun showDialog() {
         if (!customDialogClass.isShowing) {
             customDialogClass.show()
@@ -95,7 +89,11 @@ class OtpFragment : Fragment() {
                     }
                     is ResultWrapper.Success -> {
                         dismissDialog()
-                        dealerData()
+                        viewModel.dealerData { dealer ->
+                            (requireActivity().application as TechnoecorpApplication).updateDealer(
+                                dealer
+                            )
+                        }
                         binding.root.findNavController()
                             .navigate(R.id.action_otpFragment_to_dashboardActivity)
                         requireActivity().finish()

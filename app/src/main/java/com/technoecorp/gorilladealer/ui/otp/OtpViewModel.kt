@@ -71,16 +71,14 @@ class OtpViewModel(
         }
     }
 
-    suspend fun dealerData(): Dealer? {
-        val data = viewModelScope.async {
+    fun dealerData(callback: (Dealer?) -> Unit) {
+        viewModelScope.launch {
             val dealer =
                 datastore.getDataObject(PreferenceDatastore.DEALER, Dealer::class.java)
                     .take(1).first()
-            Timber.e("verified == $dealer")
-
-            dealer
-        }.await()
-        return data
+            callback(dealer)
+        }
     }
+
 
 }

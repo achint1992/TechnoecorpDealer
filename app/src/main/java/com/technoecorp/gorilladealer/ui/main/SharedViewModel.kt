@@ -8,40 +8,42 @@ import com.technoecorp.domain.domainmodel.data.Dealer
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SharedViewModel(private val preferencesDatastore: PreferencesRepository) : ViewModel() {
 
-    suspend fun shouldNavigateToDashBoard(): Boolean {
-        val data = viewModelScope.async {
+    fun shouldNavigateToDashBoard(callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
             val loggedIn =
                 preferencesDatastore.getData(PreferenceDatastore.LOGGED_IN, false).take(1).first()
             val verified =
                 preferencesDatastore.getData(PreferenceDatastore.VERIFIED, false).take(1).first()
 
-            loggedIn && verified
+            callback(loggedIn && verified)
+
         }
-        return data.await()
     }
 
-    suspend fun dealerData(): Dealer? {
-        val data = viewModelScope.async {
+    fun dealerData(callback: (Dealer?) -> Unit) {
+        viewModelScope.launch {
             val dealer =
                 preferencesDatastore.getDataObject(PreferenceDatastore.DEALER, Dealer::class.java)
                     .take(1).first()
-            Timber.e("verified == $dealer")
-
-            dealer
-        }.await()
-        return data
+            callback(dealer)
+        }
     }
 
-    suspend fun saveReferCode(referCode: String) {
-        preferencesDatastore.saveData(PreferenceDatastore.REFER_CODE_DEEP_LINK, referCode)
+     fun saveReferCode(referCode: String) {
+        viewModelScope.launch {
+            preferencesDatastore.saveData(PreferenceDatastore.REFER_CODE_DEEP_LINK, referCode)
+        }
     }
 
-    suspend fun clearData() {
-        preferencesDatastore.clearData()
+    fun clearData() {
+        viewModelScope.launch {
+            preferencesDatastore.clearData()
+        }
     }
 
 }
