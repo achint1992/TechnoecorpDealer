@@ -122,11 +122,12 @@ class MyDealerActivity : AppCompatActivity() {
                         selectState(stateWiseCount)
                         list.add(stateWiseCount)
                         it.data?.status?.let { check ->
-                            if (check) {
-                                list.addAll(it.data?.data!!)
-                            } else {
+                            if (!check) {
                                 (this@MyDealerActivity).showShortToast(it.data?.message)
+                                return@let
                             }
+                            list.addAll(it.data?.data!!)
+
                         }
                         val coloredList = list.map { state ->
                             val random = randomObj.nextInt(androidColors.size)
@@ -162,11 +163,11 @@ class MyDealerActivity : AppCompatActivity() {
                             )
                         }
                         it.data?.status?.let { check ->
-                            if (check) {
-                                list.addAll(it.data?.data!!)
-                            } else {
+                            if (!check) {
                                 (this@MyDealerActivity).showShortToast(it.data?.message)
+                                return@let
                             }
+                            list.addAll(it.data?.data!!)
                         }
                         cityWiseCountAdapter.submitList(list)
 

@@ -104,11 +104,11 @@ class ProductListFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         result.data?.status?.let {
-                            if (it) {
-                                productAdapter.submitList(result.data?.data)
-                            } else {
+                            if (!it) {
                                 requireContext().showShortToast(result.data?.statusCode.toString())
+                                return@let
                             }
+                            productAdapter.submitList(result.data?.data)
                         }
                     }
                 }
@@ -127,19 +127,20 @@ class ProductListFragment : Fragment() {
                     is ResultWrapper.Success -> {
                         dismissDialog()
                         result.data?.status?.let {
-                            if (it) {
-                                val bundle = bundleOf(
-                                    "url" to result.data?.data?.redirectUrl,
-                                    "title" to "Please Wait.."
-                                )
-                                binding.root.findNavController()
-                                    .navigate(
-                                        R.id.action_productListFragment_to_webViewActivity,
-                                        bundle
-                                    )
-                            } else {
+                            if (!it) {
                                 requireContext().showShortToast(result.data?.message)
+                                return@let
                             }
+                            val bundle = bundleOf(
+                                "url" to result.data?.data?.redirectUrl,
+                                "title" to "Please Wait.."
+                            )
+                            binding.root.findNavController()
+                                .navigate(
+                                    R.id.action_productListFragment_to_webViewActivity,
+                                    bundle
+                                )
+
                         }
                     }
                 }
