@@ -49,7 +49,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
 class DashboardFragment : Fragment() {

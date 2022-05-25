@@ -5,11 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.technoecorp.data.repository.preference.PreferencesRepository
 import com.technoecorp.data.repository.preference.datasource.PreferenceDatastore
 import com.technoecorp.domain.domainmodel.data.Dealer
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class SharedViewModel(private val preferencesDatastore: PreferencesRepository) : ViewModel() {
 
