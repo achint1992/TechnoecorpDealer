@@ -29,7 +29,10 @@ import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.domain.domainmodel.request.DealerAnalyticalRequest
 import com.technoecorp.domain.domainmodel.request.UpdateProfilePicRequest
 import com.technoecorp.domain.domainmodel.request.WithdrawalMoneyRequest
+import com.technoecorp.domain.domainmodel.response.BaseResponse
 import com.technoecorp.domain.domainmodel.response.DashboardAnalytics
+import com.technoecorp.domain.domainmodel.response.auth.otp.OtpResponse
+import com.technoecorp.domain.domainmodel.response.dealer.dashboard.DashboardAnayliticsResponse
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.FragmentDashboardBinding
 import com.technoecorp.gorilladealer.extensions.showShortExceptionToast
@@ -267,89 +270,84 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun <T> checkResponse(result: ResultWrapper<T>, callback: (T) -> Unit) {
+        when (result) {
+            is ResultWrapper.Loading -> {
+                showDialog()
+            }
+            is ResultWrapper.Error -> {
+                dismissDialog()
+                requireContext().showShortToast(result.message)
+            }
+            is ResultWrapper.Success -> {
+                dismissDialog()
+                result.data?.let {
+                    callback(it)
+                }
+            }
+            is ResultWrapper.Started -> {
+                //Nothing to done
+            }
+        }
+    }
+
+    private fun onWithdrawalResponse(data: BaseResponse) {
+        data.status.let { status ->
+            val message: String =
+                if (status) getString(R.string.withdrawal_request_success) else data.message
+            requireContext().showShortToast(message)
+        }
+    }
+
+    private fun onUpdateImageResponse(data: OtpResponse) {
+        data.status.let { bool ->
+            if (!bool) {
+                requireContext().showShortToast(data.message)
+                return@let
+            }
+            refreshImage(data.data.data.dealer.profilePic)
+            dashboardViewModel.saveData(data.data.data.dealer)
+        }
+
+    }
+
+    private fun onDashboardAnalyticResponse(data: DashboardAnayliticsResponse) {
+        data.status.let { check ->
+            if (!check) {
+                requireContext().showShortToast(data.message)
+                return@let
+            }
+            dashboardViewModel.saveDashboardResponse(data)
+            val dashboardData = data.toDashboardAnalytics()
+            data.data.recentDealers.let {
+                dashboardViewModel.saveRecentUsers(it)
+            }
+            dashboardData.let {
+                dashboardAdapter.submitList(dashboardData)
+                if (dashboardData.isEmpty()) {
+                    requireContext().showShortToast("Unable to Populate List")
+                }
+            }
+        }
+    }
+
+
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             dashboardViewModel.withDrawlResponse.collectLatest {
-                when (it) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(it.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        it.data?.status?.let { status ->
-                            val message: String? =
-                                if (status) getString(R.string.withdrawal_request_success) else it.data?.message
-                            requireContext().showShortToast(message)
-                        }
-                    }
-
-                }
+                checkResponse(it, ::onWithdrawalResponse)
             }
         }
 
         lifecycleScope.launchWhenCreated {
             dashboardViewModel.dashboardAnalytics.collectLatest { dealerAnalysis ->
-                when (dealerAnalysis) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(dealerAnalysis.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-
-                        dealerAnalysis.data?.status?.let { check ->
-                            if (!check) {
-                                requireContext().showShortToast(dealerAnalysis.data?.message)
-                                return@let
-                            }
-                            dashboardViewModel.saveDashboardResponse(dealerAnalysis.data!!)
-                            val dashboardData = dealerAnalysis.data?.toDashboardAnalytics()
-                            dealerAnalysis.data?.data?.recentDealers?.let {
-                                dashboardViewModel.saveRecentUsers(it)
-                            }
-                            dashboardData?.let {
-                                dashboardAdapter.submitList(dashboardData)
-                                if (dashboardData.isEmpty()) {
-                                    requireContext().showShortToast("Unable to Populate List")
-                                }
-                            }
-                        }
-                    }
-
-                }
+                checkResponse(dealerAnalysis, ::onDashboardAnalyticResponse)
             }
         }
 
         lifecycleScope.launchWhenCreated {
             dashboardViewModel.updateProfilePic.collectLatest {
-                when (it) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(it.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        it.data?.status?.let { bool ->
-                            if (!bool) {
-                                requireContext().showShortToast(it.data?.message)
-                                return@let
-                            }
-                            refreshImage(it.data?.data?.data?.dealer?.profilePic!!)
-                            dashboardViewModel.saveData(it.data?.data?.data?.dealer!!)
-                        }
-                    }
-
-                }
+                checkResponse(it, ::onUpdateImageResponse)
             }
         }
     }

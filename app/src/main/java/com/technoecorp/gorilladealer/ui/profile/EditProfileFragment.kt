@@ -13,7 +13,11 @@ import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.domain.domainmodel.request.UpdateProfileRequest
 import com.technoecorp.domain.domainmodel.response.auth.otp.City
 import com.technoecorp.domain.domainmodel.response.auth.otp.Country
+import com.technoecorp.domain.domainmodel.response.auth.otp.OtpResponse
 import com.technoecorp.domain.domainmodel.response.auth.otp.State
+import com.technoecorp.domain.domainmodel.response.company.city.CityResponse
+import com.technoecorp.domain.domainmodel.response.company.country.CountryResponse
+import com.technoecorp.domain.domainmodel.response.company.state.StateResponse
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.FragmentEditProfileBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
@@ -203,109 +207,89 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    private fun setCountryData(data: CountryResponse) {
+        if (!data.status) {
+            requireContext().showShortToast(data.message)
+            return
+        }
+        countryAdapter.addItems(data.data)
+    }
+
+    private fun setStateData(data: StateResponse) {
+        if (!data.status) {
+            requireContext().showShortToast(data.message)
+            return
+        }
+        stateAdapter.addItems(data.data)
+    }
+
+    private fun setCityData(data: CityResponse) {
+        if (!data.status) {
+            requireContext().showShortToast(data.message)
+            return
+        }
+        cityAdapter.addItems(data.data)
+    }
+
+    private fun onEditSuccess(data: OtpResponse) {
+        data.status.let {
+            if (!it) {
+                requireContext().showShortToast(data.message)
+                return@let
+            }
+            viewModel.saveData(data.data.data.dealer)
+            requireContext().showShortToast(getString(R.string.update_success))
+            binding.root.findNavController().navigateUp()
+        }
+    }
 
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.country.collectLatest { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(result.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        result.data?.let {
-                            if (!it.status) {
-                                requireContext().showShortToast(it.message)
-                                return@let
-                            }
-                            countryAdapter.addItems(it.data)
-                        }
-                    }
-                }
+                checkResponse(result, ::setCountryData)
             }
         }
 
         lifecycleScope.launchWhenCreated {
             viewModel.stateList.collectLatest { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(result.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        result.data?.let {
-                            if (!it.status) {
-                                requireContext().showShortToast(it.message)
-                                return@let
-                            }
-                            stateAdapter.addItems(it.data)
-                        }
-                    }
-                }
+                checkResponse(result, ::setStateData)
             }
         }
 
         lifecycleScope.launchWhenCreated {
             viewModel.city.collectLatest { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(result.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        result.data?.let {
-                            if (!it.status) {
-                                requireContext().showShortToast(it.message)
-                                return@let
-                            }
-                            cityAdapter.addItems(it.data)
-                        }
-                    }
-
-                }
+                checkResponse(result, ::setCityData)
             }
         }
 
         lifecycleScope.launchWhenCreated {
             viewModel.updateProfile.collectLatest { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(result.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        result.data?.status?.let {
-                            if (!it) {
-                                requireContext().showShortToast(result.data?.message)
-                                return@let
-                            }
-                            viewModel.saveData(result.data?.data?.data?.dealer!!)
-                            requireContext().showShortToast(getString(R.string.update_success))
-                            binding.root.findNavController().navigateUp()
-                        }
-                    }
-
-                }
+                checkResponse(result, ::onEditSuccess)
             }
         }
 
+    }
+
+
+    private fun <T> checkResponse(result: ResultWrapper<T>, callback: (T) -> Unit) {
+        when (result) {
+            is ResultWrapper.Loading -> {
+                showDialog()
+            }
+            is ResultWrapper.Error -> {
+                dismissDialog()
+                requireContext().showShortToast(result.message)
+            }
+            is ResultWrapper.Success -> {
+                dismissDialog()
+                result.data?.let {
+                    callback(it)
+                }
+            }
+            is ResultWrapper.Started -> {
+                //Nothing to done
+            }
+        }
     }
 
 }

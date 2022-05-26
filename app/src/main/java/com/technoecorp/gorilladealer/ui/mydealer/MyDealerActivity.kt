@@ -13,9 +13,11 @@ import com.technoecorp.domain.domainmodel.request.CityWiseDealerCountRequest
 import com.technoecorp.domain.domainmodel.request.DealerFilterRequest
 import com.technoecorp.domain.domainmodel.request.StateWiseDealerCountRequest
 import com.technoecorp.domain.domainmodel.response.dealer.citylist.CityWiseCount
+import com.technoecorp.domain.domainmodel.response.dealer.citylist.CityWiseCountResponse
 import com.technoecorp.domain.domainmodel.response.dealer.dashboard.DashboardAnayliticsResponse
 import com.technoecorp.domain.domainmodel.response.dealer.filter.DealerFilterResponse
 import com.technoecorp.domain.domainmodel.response.dealer.statelist.StateWiseCount
+import com.technoecorp.domain.domainmodel.response.dealer.statelist.StateWiseCountResponse
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.ActivityMyDealerBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
@@ -78,7 +80,9 @@ class MyDealerActivity : AppCompatActivity() {
         binding.cityList.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.cityList.adapter = cityWiseCountAdapter
-
+        binding.toolbar.linearBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun showDialog() {
@@ -93,89 +97,91 @@ class MyDealerActivity : AppCompatActivity() {
         }
     }
 
+    private fun onStateCountResponse(stateWiseCountResponse: StateWiseCountResponse) {
+        val list: ArrayList<StateWiseCount> = ArrayList()
+        val activeUsers: Int = latestDashboard.data.activeDealer
+        val deactiveUsers: Int = latestDashboard.data.deactiveDealer
+        val stateWiseCount = StateWiseCount(
+            activeUsers,
+            (activeUsers + deactiveUsers),
+            deactiveUsers,
+            -1,
+            "All States"
+        )
+        selectState(stateWiseCount)
+        list.add(stateWiseCount)
+        stateWiseCountResponse.status.let { check ->
+            if (!check) {
+                (this@MyDealerActivity).showShortToast(stateWiseCountResponse.message)
+                return@let
+            }
+            list.addAll(stateWiseCountResponse.data)
+
+        }
+        val coloredList = list.map { state ->
+            val random = randomObj.nextInt(androidColors.size)
+            state.color = androidColors[random]
+            state
+        }
+        stateAdapter.submitList(coloredList)
+    }
+
+    private fun onCityWiseCountResponse(cityWiseCountResponse: CityWiseCountResponse) {
+        val list: ArrayList<CityWiseCount> = ArrayList()
+        stateWiseCount?.let { data ->
+            list.add(
+                CityWiseCount(
+                    data.activeCount,
+                    -1,
+                    "All Cities",
+                    data.count,
+                    data.deactiveCount,
+                    data.stateName
+                )
+            )
+        }
+        cityWiseCountResponse.status.let { check ->
+            if (!check) {
+                (this@MyDealerActivity).showShortToast(cityWiseCountResponse.message)
+                return@let
+            }
+            list.addAll(cityWiseCountResponse.data)
+        }
+        cityWiseCountAdapter.submitList(list)
+
+    }
+
+    private fun <T> checkResponse(result: ResultWrapper<T>, callback: (T) -> Unit) {
+        when (result) {
+            is ResultWrapper.Loading -> {
+                showDialog()
+            }
+            is ResultWrapper.Error -> {
+                dismissDialog()
+                this.showShortToast(result.message)
+            }
+            is ResultWrapper.Success -> {
+                dismissDialog()
+                result.data?.let {
+                    callback(it)
+                }
+            }
+            is ResultWrapper.Started -> {
+                //Nothing to done
+            }
+        }
+    }
 
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.stateList.collectLatest {
-                when (it) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        (this@MyDealerActivity).showShortToast(it.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        val list: ArrayList<StateWiseCount> = ArrayList()
-                        val activeUsers: Int = latestDashboard.data.activeDealer
-                        val deactiveUsers: Int = latestDashboard.data.deactiveDealer
-                        val stateWiseCount = StateWiseCount(
-                            activeUsers,
-                            (activeUsers + deactiveUsers),
-                            deactiveUsers,
-                            -1,
-                            "All States"
-                        )
-                        selectState(stateWiseCount)
-                        list.add(stateWiseCount)
-                        it.data?.status?.let { check ->
-                            if (!check) {
-                                (this@MyDealerActivity).showShortToast(it.data?.message)
-                                return@let
-                            }
-                            list.addAll(it.data?.data!!)
-
-                        }
-                        val coloredList = list.map { state ->
-                            val random = randomObj.nextInt(androidColors.size)
-                            state.color = androidColors[random]
-                            state
-                        }
-                        stateAdapter.submitList(coloredList)
-                    }
-                }
+                checkResponse(it, ::onStateCountResponse)
             }
-
         }
 
         lifecycleScope.launchWhenCreated {
             viewModel.cityList.collectLatest {
-                when (it) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        val list: ArrayList<CityWiseCount> = ArrayList()
-                        stateWiseCount?.let { data ->
-                            list.add(
-                                CityWiseCount(
-                                    data.activeCount,
-                                    -1,
-                                    "All Cities",
-                                    data.count,
-                                    data.deactiveCount,
-                                    data.stateName
-                                )
-                            )
-                        }
-                        it.data?.status?.let { check ->
-                            if (!check) {
-                                (this@MyDealerActivity).showShortToast(it.data?.message)
-                                return@let
-                            }
-                            list.addAll(it.data?.data!!)
-                        }
-                        cityWiseCountAdapter.submitList(list)
-
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        (this@MyDealerActivity).showShortToast(it.message)
-                    }
-
-                }
+                checkResponse(it, ::onCityWiseCountResponse)
             }
         }
     }
@@ -283,11 +289,9 @@ class MyDealerActivity : AppCompatActivity() {
 
     }
 
-    private fun setLatestDashboard(data:DashboardAnayliticsResponse?) {
+    private fun setLatestDashboard(data: DashboardAnayliticsResponse?) {
         data?.let {
-            this.latestDashboard=data
+            this.latestDashboard = data
         }
     }
-
-
 }

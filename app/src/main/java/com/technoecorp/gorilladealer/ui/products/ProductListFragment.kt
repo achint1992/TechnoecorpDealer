@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.technoecorp.domain.ResultWrapper
 import com.technoecorp.domain.domainmodel.data.Dealer
 import com.technoecorp.domain.domainmodel.request.PaymentLinkRequest
+import com.technoecorp.domain.domainmodel.response.company.payment.PaymentLinkResponse
+import com.technoecorp.domain.domainmodel.response.company.product.ProductListResponse
 import com.technoecorp.gorilladealer.R
 import com.technoecorp.gorilladealer.databinding.FragmentProductListBinding
 import com.technoecorp.gorilladealer.extensions.showShortToast
@@ -90,62 +92,68 @@ class ProductListFragment : Fragment() {
         }
     }
 
+    private fun onPaymentLinkResponse(paymentLinkResponse: PaymentLinkResponse) {
+        paymentLinkResponse.status.let {
+            if (!it) {
+                requireContext().showShortToast(paymentLinkResponse.message)
+                return@let
+            }
+            val bundle = bundleOf(
+                "url" to paymentLinkResponse.data.redirectUrl,
+                "title" to "Please Wait.."
+            )
+            binding.root.findNavController()
+                .navigate(
+                    R.id.action_productListFragment_to_webViewActivity,
+                    bundle
+                )
+
+        }
+    }
+
+    private fun onProductListResponse(productListResponse: ProductListResponse) {
+        productListResponse.status.let {
+            if (!it) {
+                requireContext().showShortToast(productListResponse.statusCode.toString())
+                return@let
+            }
+            productAdapter.submitList(productListResponse.data)
+        }
+    }
+
     private fun initCollector() {
         lifecycleScope.launchWhenCreated {
             viewModel.products.collectLatest { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(result.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        result.data?.status?.let {
-                            if (!it) {
-                                requireContext().showShortToast(result.data?.statusCode.toString())
-                                return@let
-                            }
-                            productAdapter.submitList(result.data?.data)
-                        }
-                    }
-                }
+                checkResponse(result, ::onProductListResponse)
             }
         }
         lifecycleScope.launchWhenCreated {
             viewModel.paymentLink.collectLatest { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showDialog()
-                    }
-                    is ResultWrapper.Error -> {
-                        dismissDialog()
-                        requireContext().showShortToast(result.message)
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissDialog()
-                        result.data?.status?.let {
-                            if (!it) {
-                                requireContext().showShortToast(result.data?.message)
-                                return@let
-                            }
-                            val bundle = bundleOf(
-                                "url" to result.data?.data?.redirectUrl,
-                                "title" to "Please Wait.."
-                            )
-                            binding.root.findNavController()
-                                .navigate(
-                                    R.id.action_productListFragment_to_webViewActivity,
-                                    bundle
-                                )
-
-                        }
-                    }
-                }
+                checkResponse(result, ::onPaymentLinkResponse)
             }
         }
     }
+
+    private fun <T> checkResponse(result: ResultWrapper<T>, callback: (T) -> Unit) {
+        when (result) {
+            is ResultWrapper.Loading -> {
+                showDialog()
+            }
+            is ResultWrapper.Error -> {
+                dismissDialog()
+                requireContext().showShortToast(result.message)
+            }
+            is ResultWrapper.Success -> {
+                dismissDialog()
+                result.data?.let {
+                    callback(it)
+                }
+            }
+            is ResultWrapper.Started -> {
+                //Nothing to done
+            }
+        }
+    }
+
 
 }

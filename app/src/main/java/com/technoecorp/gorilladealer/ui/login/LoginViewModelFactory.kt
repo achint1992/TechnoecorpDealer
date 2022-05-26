@@ -2,7 +2,6 @@ package com.technoecorp.gorilladealer.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.technoecorp.data.repository.preference.PreferencesRepository
 import com.technoecorp.domain.usecase.auth.LoginDealerUseCase
 
 class LoginViewModelFactory(
